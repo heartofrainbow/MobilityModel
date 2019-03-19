@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QThread>
 
+
 namespace Ui {
 class RandomWalk;
 }
@@ -20,6 +21,8 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+
 public slots:
     void on_OutputReceived(QString qs);
 private:
@@ -48,7 +51,7 @@ private:
     double x,y;
     double v;
     double d;
-    double lastErr = 0;
+    int lastErr = 0;
 //    int id;
     bool first = true;
 };

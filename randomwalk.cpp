@@ -9,6 +9,7 @@
 #include <chrono>
 //#include <thread>
 
+bool running = false;
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
@@ -111,10 +112,10 @@ void node::run(){
     wholeTime = currentTime-baseTime;
     //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
     str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg((int)QThread::currentThreadId())\
-            .arg(wholeTime.count()/1e6).arg(this->getx()).arg(this->gety()).arg(this->getv()).arg(this->getd());
+            .arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
     emit(output(str));
     //initial output
-    while(true){
+    while(running == true){
         currentTime = high_resolution_clock::now();
         tmpTime = (currentTime-lastShow);
         loopEndTime = high_resolution_clock::now();
@@ -129,7 +130,7 @@ void node::run(){
             wholeTime = currentTime - baseTime;
             //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
             str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg((int)QThread::currentThreadId())\
-                    .arg(wholeTime.count()/1e6).arg(this->getx()).arg(this->gety()).arg(this->getv()).arg(this->getd());
+                    .arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
             emit(output(str));
             lastShow = high_resolution_clock::now();
         }
@@ -142,7 +143,7 @@ void node::run(){
             this->setd(randomDir(e));
             lastErr = 0;                //To avoid node bouncing near the edge
         }
-
+        msleep(1);
     }
 }
 RandomWalk::RandomWalk(QWidget *parent) :
@@ -161,11 +162,19 @@ RandomWalk::~RandomWalk()
 }
 
 void RandomWalk::on_OutputReceived(QString qs){
-    ui->textBrowser->append(qs);
+    ui->textBrowser->insertPlainText(qs);
+    ui->textBrowser->moveCursor(QTextCursor::End);
+    QApplication::processEvents();
 }
 void RandomWalk::on_pushButton_clicked()
 {
     node *nd = new node(this);
     connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
+    running = true;
     nd->start();
+}
+
+void RandomWalk::on_pushButton_2_clicked()
+{
+    running = false;
 }
