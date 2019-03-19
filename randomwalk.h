@@ -20,7 +20,8 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
+public slots:
+    void on_OutputReceived(QString qs);
 private:
     Ui::RandomWalk *ui;
 

@@ -90,6 +90,7 @@ void node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
 }
 
 void node::run(){
+    QString str;
     x = randomX(e);
     y = randomY(e);
     v = randomVel(e);
@@ -108,7 +109,10 @@ void node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
+    //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
+    str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg((int)QThread::currentThreadId())\
+            .arg(wholeTime.count()/1e6).arg(this->getx()).arg(this->gety()).arg(this->getv()).arg(this->getd());
+    emit(output(str));
     //initial output
     while(true){
         currentTime = high_resolution_clock::now();
@@ -123,7 +127,10 @@ void node::run(){
         this->update(loopTime.count()/1e6);
         if(tmpTime.count() >= interval*1e6){    //Show node info every $interval second
             wholeTime = currentTime - baseTime;
-            printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
+            //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
+            str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg((int)QThread::currentThreadId())\
+                    .arg(wholeTime.count()/1e6).arg(this->getx()).arg(this->gety()).arg(this->getv()).arg(this->getd());
+            emit(output(str));
             lastShow = high_resolution_clock::now();
         }
         lastUpdate = high_resolution_clock::now();
@@ -153,9 +160,12 @@ RandomWalk::~RandomWalk()
     delete ui;
 }
 
-
+void RandomWalk::on_OutputReceived(QString qs){
+    ui->textBrowser->append(qs);
+}
 void RandomWalk::on_pushButton_clicked()
 {
     node *nd = new node(this);
+    connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
     nd->start();
 }
