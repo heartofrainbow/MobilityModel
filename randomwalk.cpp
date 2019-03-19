@@ -168,10 +168,13 @@ void RandomWalk::on_OutputReceived(QString qs){
 }
 void RandomWalk::on_pushButton_clicked()
 {
-    node *nd = new node(this);
-    connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
+    int nNodes = ui->lineEdit->text().toInt();
     running = true;
-    nd->start();
+    for(int i=0;i<nNodes;i++){
+        node *nd = new node(this);
+        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
+        nd->start();
+    }
 }
 
 void RandomWalk::on_pushButton_2_clicked()
