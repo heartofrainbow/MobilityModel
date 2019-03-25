@@ -17,10 +17,12 @@
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QLegendMarker>
 
+
 QVector<QPointF> points;
 QGraphicsScene* scene;
 
 bool running = false;
+int nNodes = 0;
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
@@ -164,7 +166,16 @@ RandomWalk::RandomWalk(QWidget *parent) :
     ui(new Ui::RandomWalk)
 {
     ui->setupUi(this);
-
+    ui->customPlot->addGraph();
+    ui->customPlot->xAxis->setLabel("x");
+    ui->customPlot->yAxis->setLabel("y");
+    QCPScatterStyle myScatter;
+    myScatter.setShape(QCPScatterStyle::ssCircle);
+    myScatter.setPen(QPen(Qt::blue));
+    myScatter.setBrush(Qt::white);
+    myScatter.setSize(5);
+    ui->customPlot->graph(0)->setScatterStyle(myScatter);
+    ui->customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
 }
 
 //node::node(QObject *parent):QThread(parent){
@@ -186,10 +197,13 @@ void RandomWalk::on_OutputReceived(QString qs){
 }
 void RandomWalk::on_pushButton_clicked()
 {
+    ui->customPlot->xAxis->setRange(XMIN, XMAX);
+    ui->customPlot->yAxis->setRange(YMIN, YMAX);
+    ui->customPlot->replot();
 
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
-    int nNodes = ui->lineEdit->text().toInt();
+    nNodes = ui->lineEdit->text().toInt();
     running = true;
     QVector<double> x(nNodes);
     QVector<double> y(nNodes);
@@ -199,6 +213,7 @@ void RandomWalk::on_pushButton_clicked()
         connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
         nd->start();
     }
+    shower->start();
 }
 
 void RandomWalk::on_pushButton_2_clicked()
@@ -209,10 +224,19 @@ void RandomWalk::on_pushButton_2_clicked()
 void RandomWalk::on_FlushNodes(){
 
    //Do Something
+    QVector<double> x(nNodes),y(nNodes);
+    for(int i=0;i<nNodes; i++){
+        x[i]=points.at(i).x();
+        y[i]=points.at(i).y();
+    }
+    ui->customPlot->graph(0)->setData(x, y);
+    ui->customPlot->replot();
+    x.clear();
+    y.clear();
 }
 void showNodes::run(){
     while(true){
         emit(flushNodes());
-        msleep(1000);
+        msleep(100);
     }
 }
