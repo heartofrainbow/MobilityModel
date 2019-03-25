@@ -25,6 +25,7 @@ private slots:
 
 public slots:
     void on_OutputReceived(QString qs);
+    void on_FlushNodes();
 private:
     Ui::RandomWalk *ui;
 
@@ -44,7 +45,8 @@ public:
     void setd(double d);
     void update(double time);
     void reflect(int err);
-    node(QObject *parent=NULL);
+    //node(QObject *parent=NULL);
+    node(int n);
 signals:
     void output(QString qs);
 private:
@@ -52,8 +54,18 @@ private:
     double v;
     double d;
     int lastErr = 0;
-//    int id;
+    int id;
     bool first = true;
+};
+
+class showNodes: public QThread{
+    Q_OBJECT
+public:
+//    explicit showNodes();
+    void run();
+
+signals:
+    void flushNodes();
 };
 
 #endif // RANDOMWALK_H
