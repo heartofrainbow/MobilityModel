@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = MobilityModel
 TEMPLATE = app
@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    randomwalk.cpp
+    randomwalk.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         mainwindow.h \
-    randomwalk.h
+    randomwalk.h \
+    qcustomplot.h
 
 FORMS += \
         mainwindow.ui \

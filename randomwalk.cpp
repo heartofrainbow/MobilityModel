@@ -164,9 +164,6 @@ RandomWalk::RandomWalk(QWidget *parent) :
     ui(new Ui::RandomWalk)
 {
     ui->setupUi(this);
-    scene = new QGraphicsScene(ui->graphicsView);
-//    scene->setBackgroundBrush(Qt::yellow);
-    ui->graphicsView->setScene(scene);
 
 }
 
@@ -211,14 +208,7 @@ void RandomWalk::on_pushButton_2_clicked()
 
 void RandomWalk::on_FlushNodes(){
 
-    QtCharts::QScatterSeries *series;
-    series->setName("scatter1");
-    series->setMarkerShape(QtCharts::QScatterSeries::MarkerShapeCircle);
-    series->setMarkerSize(15.0);
-    for(int i=0;i<points.size();i++){
-        series->append(points.at(i).x(),points.at(i).y());
-    }
-    ui->graphicsView->show();
+   //Do Something
 }
 void showNodes::run(){
     while(true){
