@@ -18,27 +18,27 @@
 #include <QtCharts/QLegendMarker>
 
 
-QVector<QPointF> points;
-QGraphicsScene* scene;
+static QVector<QPointF> points;
+//static QGraphicsScene* scene;
 
-QVector<double> xx(0);
-QVector<double> yy(0);
+static QVector<double> xx(0);
+static QVector<double> yy(0);
 
-bool running = false;
-int nNodes = 0;
+static bool running = false;
+static int nNodes = 0;
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-double XMAX = 100;
-double XMIN = 0;
-double YMAX = 100;
-double YMIN = 0;
-double VMIN = 10;
-double VMAX = 20;
+static double XMAX = 100;
+static double XMIN = 0;
+static double YMAX = 100;
+static double YMIN = 0;
+static double VMIN = 10;
+static double VMAX = 20;
 
-random_device rd;
-default_random_engine e(rd());
+static random_device rd;
+static default_random_engine e(rd());
 
 
 
@@ -99,7 +99,7 @@ void node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
        if (err ==1 || err == 2) {
            this->setd(dd<=M_PI/2?(M_PI-dd):(3*M_PI-dd));
            lastErr = err;
-       } else if (err ==3 | err ==4) {
+       } else if (err ==3 || err ==4) {
            this->setd(2*M_PI-dd);
            lastErr = err;
        }
@@ -115,7 +115,7 @@ void node::run(){
     y = randomY(e);
     v = randomVel(e);
     d = randomDir(e);
-    double interval = 1.0;        //Update node information every $interval second
+//    double interval = 1.0;        //Update node information every $interval second
     double timeout = 10.0;        //Change node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
@@ -130,8 +130,7 @@ void node::run(){
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
     //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
-    //str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id)\
-            .arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
+    //str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id).arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
     points.replace(id,QPointF(this->getx(),this->gety()));
 //    emit(output(str));
     //initial output
@@ -195,11 +194,11 @@ RandomWalk::~RandomWalk()
     delete ui;
 }
 
-void RandomWalk::on_OutputReceived(QString qs){
-//    ui->textBrowser->insertPlainText(qs);
-//    ui->textBrowser->moveCursor(QTextCursor::End);
-    QApplication::processEvents();
-}
+//void RandomWalk::on_OutputReceived(QString qs){
+////    ui->textBrowser->insertPlainText(qs);
+////    ui->textBrowser->moveCursor(QTextCursor::End);
+//    QApplication::processEvents();
+//}
 void RandomWalk::on_pushButton_clicked()
 {
     if(running == true){
@@ -224,7 +223,7 @@ void RandomWalk::on_pushButton_clicked()
     yy.resize(nNodes);
     for(int i=0;i<nNodes;i++){
         node *nd = new node(i);
-        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
+//        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
         nd->start();
     }
     shower->start();

@@ -24,7 +24,7 @@ private slots:
     void on_pushButton_2_clicked();
 
 public slots:
-    void on_OutputReceived(QString qs);
+//    void on_OutputReceived(QString qs);
     void on_FlushNodes();
 private:
     Ui::RandomWalk *ui;
@@ -47,8 +47,8 @@ public:
     void reflect(int err);
     //node(QObject *parent=NULL);
     node(int n);
-signals:
-    void output(QString qs);
+//signals:
+//    void output(QString qs);
 private:
     double x,y;
     double v;
