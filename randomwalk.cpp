@@ -21,6 +21,9 @@
 QVector<QPointF> points;
 QGraphicsScene* scene;
 
+QVector<double> xx(0);
+QVector<double> yy(0);
+
 bool running = false;
 int nNodes = 0;
 using namespace std;
@@ -172,10 +175,10 @@ RandomWalk::RandomWalk(QWidget *parent) :
     ui->customPlot->xAxis->setLabel("x");
     ui->customPlot->yAxis->setLabel("y");
     QCPScatterStyle myScatter;
-    myScatter.setShape(QCPScatterStyle::ssCircle);
+    myScatter.setShape(QCPScatterStyle::ssDisc);
     myScatter.setPen(QPen(Qt::blue));
     myScatter.setBrush(Qt::white);
-    myScatter.setSize(5);
+    myScatter.setSize(10);
     ui->customPlot->graph(0)->setScatterStyle(myScatter);
     ui->customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
 }
@@ -199,6 +202,9 @@ void RandomWalk::on_OutputReceived(QString qs){
 }
 void RandomWalk::on_pushButton_clicked()
 {
+    if(running == true){
+        running = false;    //In case OK buttom was clicked more than once
+    }
     XMIN = ui->input_XMIN->text().toDouble();
     XMAX = ui->input_XMAX->text().toDouble();
     YMIN = ui->input_YMIN->text().toDouble();
@@ -213,9 +219,9 @@ void RandomWalk::on_pushButton_clicked()
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
     running = true;
-    QVector<double> x(nNodes);
-    QVector<double> y(nNodes);
     points.resize(nNodes);
+    xx.resize(nNodes);
+    yy.resize(nNodes);
     for(int i=0;i<nNodes;i++){
         node *nd = new node(i);
         connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
@@ -232,15 +238,15 @@ void RandomWalk::on_pushButton_2_clicked()
 void RandomWalk::on_FlushNodes(){
 
    //Do Something
-    QVector<double> x(nNodes),y(nNodes);
+
     for(int i=0;i<nNodes; i++){
-        x[i]=points.at(i).x();
-        y[i]=points.at(i).y();
+        xx[i]=points.at(i).x();
+        yy[i]=points.at(i).y();
     }
-    ui->customPlot->graph(0)->setData(x, y);
+    ui->customPlot->graph(0)->setData(xx, yy);
     ui->customPlot->replot();
-    x.clear();
-    y.clear();
+//    x.clear();
+//    y.clear();
 }
 void showNodes::run(){
     while(running == true){
