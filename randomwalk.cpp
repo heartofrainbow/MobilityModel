@@ -27,19 +27,17 @@ using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-const double XMAX = 100;
-const double XMIN = 0;
-const double YMAX = 100;
-const double YMIN = 0;
-const double VMIN = 10;
-const double VMAX = 20;
+double XMAX = 100;
+double XMIN = 0;
+double YMAX = 100;
+double YMIN = 0;
+double VMIN = 10;
+double VMAX = 20;
 
 random_device rd;
 default_random_engine e(rd());
-uniform_real_distribution<double> randomX(XMIN,XMAX);
-uniform_real_distribution<double> randomY(YMIN,YMAX);
-uniform_real_distribution<double> randomVel(VMIN,VMAX);
-uniform_real_distribution<double> randomDir(0,2*M_PI);
+
+
 
 double node::getx(){
     return x;
@@ -105,6 +103,10 @@ void node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
 }
 
 void node::run(){
+    uniform_real_distribution<double> randomX(XMIN,XMAX);
+    uniform_real_distribution<double> randomY(YMIN,YMAX);
+    uniform_real_distribution<double> randomVel(VMIN,VMAX);
+    uniform_real_distribution<double> randomDir(0,2*M_PI);
     QString str;
     x = randomX(e);
     y = randomY(e);
@@ -197,13 +199,19 @@ void RandomWalk::on_OutputReceived(QString qs){
 }
 void RandomWalk::on_pushButton_clicked()
 {
+    XMIN = ui->input_XMIN->text().toDouble();
+    XMAX = ui->input_XMAX->text().toDouble();
+    YMIN = ui->input_YMIN->text().toDouble();
+    YMAX = ui->input_YMAX->text().toDouble();
+    VMIN = ui->input_VMIN->text().toDouble();
+    VMAX = ui->input_VMAX->text().toDouble();
+
     ui->customPlot->xAxis->setRange(XMIN, XMAX);
     ui->customPlot->yAxis->setRange(YMIN, YMAX);
     ui->customPlot->replot();
-
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
-    nNodes = ui->lineEdit->text().toInt();
+    nNodes = ui->input_nNodes->text().toInt();
     running = true;
     QVector<double> x(nNodes);
     QVector<double> y(nNodes);
@@ -235,7 +243,7 @@ void RandomWalk::on_FlushNodes(){
     y.clear();
 }
 void showNodes::run(){
-    while(true){
+    while(running == true){
         emit(flushNodes());
         msleep(100);
     }
