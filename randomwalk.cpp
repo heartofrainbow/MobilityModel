@@ -162,7 +162,7 @@ void node::run(){
             this->setd(randomDir(e));
             lastErr = 0;                //To avoid node bouncing near the edge
         }
-        usleep(10);
+        usleep(100);
     }
 }
 RandomWalk::RandomWalk(QWidget *parent) :
@@ -223,6 +223,7 @@ void RandomWalk::on_pushButton_clicked()
     yy.resize(nNodes);
     for(int i=0;i<nNodes;i++){
         node *nd = new node(i);
+        QThread::usleep(10);
 //        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
         nd->start();
     }
@@ -239,8 +240,10 @@ void RandomWalk::on_FlushNodes(){
    //Do Something
 
     for(int i=0;i<nNodes; i++){
-        xx[i]=points.at(i).x();
-        yy[i]=points.at(i).y();
+//        xx[i]=points.at(i).x();
+//        yy[i]=points.at(i).y();
+        xx.replace(i,points.at(i).x());
+        yy.replace(i,points.at(i).y());
     }
     ui->customPlot->graph(0)->setData(xx, yy);
     ui->customPlot->replot();
