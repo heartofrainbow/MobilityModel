@@ -21,11 +21,16 @@
 static QVector<QPointF> points;
 //static QGraphicsScene* scene;
 
+<<<<<<< HEAD
 static QVector<double> xx(0);
 static QVector<double> yy(0);
 
 static bool running = false;
 static int nNodes = 0;
+=======
+bool running = false;
+int nNodes = 0;
+>>>>>>> parent of 1c12a77... A little change in UI and slightly improved robustness
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
@@ -174,10 +179,10 @@ RandomWalk::RandomWalk(QWidget *parent) :
     ui->customPlot->xAxis->setLabel("x");
     ui->customPlot->yAxis->setLabel("y");
     QCPScatterStyle myScatter;
-    myScatter.setShape(QCPScatterStyle::ssDisc);
+    myScatter.setShape(QCPScatterStyle::ssCircle);
     myScatter.setPen(QPen(Qt::blue));
     myScatter.setBrush(Qt::white);
-    myScatter.setSize(10);
+    myScatter.setSize(5);
     ui->customPlot->graph(0)->setScatterStyle(myScatter);
     ui->customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
 }
@@ -201,9 +206,6 @@ RandomWalk::~RandomWalk()
 //}
 void RandomWalk::on_pushButton_clicked()
 {
-    if(running == true){
-        running = false;    //In case OK buttom was clicked more than once
-    }
     XMIN = ui->input_XMIN->text().toDouble();
     XMAX = ui->input_XMAX->text().toDouble();
     YMIN = ui->input_YMIN->text().toDouble();
@@ -218,9 +220,9 @@ void RandomWalk::on_pushButton_clicked()
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
     running = true;
+    QVector<double> x(nNodes);
+    QVector<double> y(nNodes);
     points.resize(nNodes);
-    xx.resize(nNodes);
-    yy.resize(nNodes);
     for(int i=0;i<nNodes;i++){
         node *nd = new node(i);
         QThread::usleep(10);
@@ -238,17 +240,22 @@ void RandomWalk::on_pushButton_2_clicked()
 void RandomWalk::on_FlushNodes(){
 
    //Do Something
-
+    QVector<double> x(nNodes),y(nNodes);
     for(int i=0;i<nNodes; i++){
+<<<<<<< HEAD
 //        xx[i]=points.at(i).x();
 //        yy[i]=points.at(i).y();
         xx.replace(i,points.at(i).x());
         yy.replace(i,points.at(i).y());
+=======
+        x[i]=points.at(i).x();
+        y[i]=points.at(i).y();
+>>>>>>> parent of 1c12a77... A little change in UI and slightly improved robustness
     }
-    ui->customPlot->graph(0)->setData(xx, yy);
+    ui->customPlot->graph(0)->setData(x, y);
     ui->customPlot->replot();
-//    x.clear();
-//    y.clear();
+    x.clear();
+    y.clear();
 }
 void showNodes::run(){
     while(running == true){
