@@ -27,17 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    randomwalk.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    nodeplot.cpp
 
 HEADERS += \
         mainwindow.h \
-    randomwalk.h \
-    qcustomplot.h
+    qcustomplot.h \
+    nodeplot.h
 
 FORMS += \
         mainwindow.ui \
-    randomwalk.ui
+    nodeplot.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

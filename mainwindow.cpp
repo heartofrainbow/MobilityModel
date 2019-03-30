@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "randomwalk.h"
+#include "nodeplot.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +16,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_8_triggered()
 {
-    RandomWalk *randomwalk_ui = new RandomWalk;
-    randomwalk_ui->show();
+    NodePlot *NodePlot_ui = new NodePlot;
+    NodePlot_ui->show();
 
 }

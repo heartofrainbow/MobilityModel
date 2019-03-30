@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RandomWalk</class>
- <widget class="QMainWindow" name="RandomWalk">
+ <class>NodePlot</class>
+ <widget class="QMainWindow" name="NodePlot">
   <property name="geometry">
    <rect>
     <x>0</x>

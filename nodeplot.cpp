@@ -1,6 +1,6 @@
 #define M_PI 3.141592654
-#include "randomwalk.h"
-#include "ui_randomwalk.h"
+#include "nodeplot.h"
+#include "ui_nodeplot.h"
 
 #include <iostream>
 #include <random>
@@ -165,9 +165,9 @@ void node::run(){
         msleep(10);
     }
 }
-RandomWalk::RandomWalk(QWidget *parent) :
+NodePlot::NodePlot(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::RandomWalk)
+    ui(new Ui::NodePlot)
 {
     ui->setupUi(this);
     ui->customPlot->addGraph();
@@ -189,17 +189,17 @@ RandomWalk::RandomWalk(QWidget *parent) :
 node::node(int n){
     this->id = n;
 }
-RandomWalk::~RandomWalk()
+NodePlot::~NodePlot()
 {
     delete ui;
 }
 
-//void RandomWalk::on_OutputReceived(QString qs){
+//void NodePlot::on_OutputReceived(QString qs){
 ////    ui->textBrowser->insertPlainText(qs);
 ////    ui->textBrowser->moveCursor(QTextCursor::End);
 //    QApplication::processEvents();
 //}
-void RandomWalk::on_pushButton_clicked()
+void NodePlot::on_pushButton_clicked()
 {
     if(running == true){
         running = false;    //In case OK buttom was clicked more than once
@@ -230,12 +230,12 @@ void RandomWalk::on_pushButton_clicked()
     shower->start();
 }
 
-void RandomWalk::on_pushButton_2_clicked()
+void NodePlot::on_pushButton_2_clicked()
 {
     running = false;
 }
 
-void RandomWalk::on_FlushNodes(){
+void NodePlot::on_FlushNodes(){
 
    //Do Something
 

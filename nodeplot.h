@@ -1,5 +1,5 @@
-#ifndef RANDOMWALK_H
-#define RANDOMWALK_H
+#ifndef NodePlot_H
+#define NodePlot_H
 
 
 #include <QMainWindow>
@@ -7,17 +7,17 @@
 
 
 namespace Ui {
-class RandomWalk;
+class NodePlot;
 }
 
-class RandomWalk : public QMainWindow
+class NodePlot : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit RandomWalk(QWidget *parent = nullptr);
-//    RandomWalk();
-    ~RandomWalk();
+    explicit NodePlot(QWidget *parent = nullptr);
+//    NodePlot();
+    ~NodePlot();
 
 private slots:
     void on_pushButton_clicked();
@@ -27,7 +27,7 @@ public slots:
 //    void on_OutputReceived(QString qs);
     void on_FlushNodes();
 private:
-    Ui::RandomWalk *ui;
+    Ui::NodePlot *ui;
 
 };
 
@@ -68,4 +68,4 @@ signals:
     void flushNodes();
 };
 
-#endif // RANDOMWALK_H
+#endif // NodePlot_H
