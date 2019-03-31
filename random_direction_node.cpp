@@ -112,7 +112,7 @@ void random_direction_node::run(){
     v = randomVel(e);
     d = randomDir(e);
 //    double interval = 1.0;        //Update random_direction_node information every $interval second
-    double timeout = 10.0;        //Change random_direction_node speed&direction every $interval second
+//    double timeout = 10.0;        //Change random_direction_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;
