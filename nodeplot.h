@@ -22,6 +22,8 @@ private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
 
+    void on_comboBox_currentIndexChanged(int index);
+
 public slots:
 //    void on_OutputReceived(QString qs);
     void on_FlushNodes();

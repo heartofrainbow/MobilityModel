@@ -29,14 +29,16 @@ SOURCES += \
         mainwindow.cpp \
     qcustomplot.cpp \
     nodeplot.cpp \
-    random_walk_node.cpp
+    random_walk_node.cpp \
+    random_direction_node.cpp
 
 HEADERS += \
         mainwindow.h \
     qcustomplot.h \
     nodeplot.h \
     publicvar.h \
-    random_walk_node.h
+    random_walk_node.h \
+    random_direction_node.h
 
 FORMS += \
         mainwindow.ui \

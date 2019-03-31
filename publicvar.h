@@ -19,8 +19,8 @@ extern double YMIN;
 extern double VMIN;
 extern double VMAX;
 
-//extern random_device rd;
-//extern default_random_engine e(rd());
+extern random_device rd;
+extern default_random_engine e;
 
 
 #endif // PUBLICVAR_H

@@ -1,10 +1,11 @@
-#ifndef RANDOM_WALK_NODE_H
-#define RANDOM_WALK_NODE_H
+#ifndef RANDOM_DIRECTION_NODE_H
+#define RANDOM_DIRECTION_NODE_H
 
 #include <QObject>
 #include <QThread>
 
-class random_walk_node:public QThread{
+class random_direction_node : public QThread
+{
     Q_OBJECT
 public:
     void run();
@@ -18,10 +19,7 @@ public:
     void setd(double d);
     void update(double time);
     void reflect(int err);
-    //node(QObject *parent=NULL);
-    random_walk_node(int n);
-//signals:
-//    void output(QString qs);
+    random_direction_node(int n);
 private:
     double x,y;
     double v;
@@ -29,5 +27,7 @@ private:
     int lastErr = 0;
     int id;
     bool first = true;
+    bool reflected = false;
 };
-#endif // RANDOM_WALK_NODE_H
+
+#endif // RANDOM_DIRECTION_NODE_H

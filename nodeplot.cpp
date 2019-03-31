@@ -2,6 +2,8 @@
 #include "nodeplot.h"
 #include "ui_nodeplot.h"
 #include "publicvar.h"
+#include "random_walk_node.h"
+#include "random_direction_node.h"
 
 #include <iostream>
 #include <random>
@@ -17,7 +19,6 @@
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QLegendMarker>
 
-#include "random_walk_node.h"
 
 
 QVector<QPointF> points;
@@ -25,6 +26,7 @@ QVector<double> xx(0);
 QVector<double> yy(0);
 bool running = false;
 int nNodes = 0;
+int type = 0;   //0=RandomWalk, 1=RandomDirection
 
 using namespace std;
 using std::chrono::high_resolution_clock;
@@ -37,8 +39,8 @@ double YMIN = 0;
 double VMIN = 10;
 double VMAX = 20;
 
-//random_device rd;
-//default_random_engine e(rd());
+random_device rd;
+default_random_engine e(rd());
 
 
 
@@ -97,11 +99,19 @@ void NodePlot::on_pushButton_clicked()
     points.resize(nNodes);
     xx.resize(nNodes);
     yy.resize(nNodes);
-    for(int i=0;i<nNodes;i++){
-        node *nd = new node(i);
-        QThread::usleep(10);
-//        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
-        nd->start();
+    if(type == 0){
+        for(int i=0;i<nNodes;i++){
+            random_walk_node *nd = new random_walk_node(i);
+            QThread::usleep(10);
+    //        connect(nd,SIGNAL(output(QString)),this,SLOT(on_OutputReceived(QString)));
+            nd->start();
+        }
+    }else if(type ==1){
+        for(int i=0;i<nNodes;i++){
+            random_direction_node *nd = new random_direction_node(i);
+            QThread::usleep(10);
+            nd->start();
+        }
     }
     shower->start();
 }
@@ -109,6 +119,9 @@ void NodePlot::on_pushButton_clicked()
 void NodePlot::on_pushButton_2_clicked()
 {
     running = false;
+//    points.clear();
+//    xx.clear();
+//    yy.clear();
 }
 
 void NodePlot::on_FlushNodes(){
@@ -130,5 +143,14 @@ void showNodes::run(){
     while(running == true){
         emit(flushNodes());
         msleep(100);
+    }
+}
+
+void NodePlot::on_comboBox_currentIndexChanged(int index)
+{
+    if(index == 0){
+        type = 0;
+    }else if(index == 1){
+        type = 1;
     }
 }
