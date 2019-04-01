@@ -14,10 +14,7 @@ using std::chrono::milliseconds;
 
 //random_device rd;
 //default_random_engine e(rd());
-static uniform_real_distribution<double> randomX(XMIN,XMAX);
-static uniform_real_distribution<double> randomY(YMIN,YMAX);
-static uniform_real_distribution<double> randomVel(VMIN,VMAX);
-static uniform_real_distribution<double> randomDir(0,2*M_PI);
+
 
 
 
@@ -79,6 +76,7 @@ void random_direction_node::update(double time){   //parameter time is in second
 }
 
 void random_direction_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
+    uniform_real_distribution<double> randomDir(0,2*M_PI);
 //       double dd = this->getd();
        if (err == lastErr) {           //In case random_direction_node reflect forever near an edge
            return;
@@ -105,6 +103,10 @@ void random_direction_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4
 }
 
 void random_direction_node::run(){
+    uniform_real_distribution<double> randomX(XMIN,XMAX);
+    uniform_real_distribution<double> randomY(YMIN,YMAX);
+    uniform_real_distribution<double> randomVel(VMIN,VMAX);
+    uniform_real_distribution<double> randomDir(0,2*M_PI);
 
     QString str;
     x = randomX(e);
