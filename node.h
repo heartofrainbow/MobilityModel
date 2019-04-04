@@ -19,7 +19,6 @@ public:
     void setd(double d);
     void update(double time);
     void reflect(int err);
-    //node(QObject *parent=NULL);
     node(int n);
     //variables:
     double x,y;
@@ -28,9 +27,6 @@ public:
     int lastErr = 0;
     int id;
     bool first = true;
-//signals:
-//    void output(QString qs);
-//private:
 
 };
 

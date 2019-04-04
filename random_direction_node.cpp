@@ -12,12 +12,6 @@ using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-//random_device rd;
-//default_random_engine e(rd());
-
-
-
-
 random_direction_node::random_direction_node(int n):node(n){
     this->id = n;
 }
@@ -49,7 +43,6 @@ void random_direction_node::update(double time){   //parameter time is in second
 
 void random_direction_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
     uniform_real_distribution<double> randomDir(0,2*M_PI);
-//       double dd = this->getd();
        if (err == lastErr) {           //In case random_direction_node reflect forever near an edge
            return;
        }
@@ -71,7 +64,6 @@ void random_direction_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4
            }while(d <= M_PI);
        }
        reflected = true;
-//       sleep(2);
 }
 
 void random_direction_node::run(){
@@ -85,8 +77,6 @@ void random_direction_node::run(){
     y = randomY(e);
     v = randomVel(e);
     d = randomDir(e);
-//    double interval = 1.0;        //Update random_direction_node information every $interval second
-//    double timeout = 10.0;        //Change random_direction_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;
@@ -99,10 +89,7 @@ void random_direction_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_direction_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
-    //str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id).arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
     points.replace(id,QPointF(this->getx(),this->gety()));
-//    emit(output(str));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();
@@ -116,23 +103,9 @@ void random_direction_node::run(){
         loopTime=(loopEndTime-lastUpdate);
         this->update(loopTime.count()/1e6);
 
-//        if(tmpTime.count() >= interval*1e6){    //Show random_direction_node info every $interval second
-//            wholeTime = currentTime - baseTime;
-//            //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
-////            str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id)\
-////                    .arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
-////            emit(output(str));
-//            lastShow = high_resolution_clock::now();
-//        }
         lastUpdate = high_resolution_clock::now();
         currentTime = high_resolution_clock::now();
         changeTime = currentTime-lastChange;
-//        if(changeTime.count() > timeout*1e6){       //Regenerate random_direction_node info every $timeout second
-//            lastChange = currentTime;
-//            this->setv(randomVel(e));
-//            this->setd(randomDir(e));
-//            lastErr = 0;                //To avoid random_direction_node bouncing near the edge
-//        }
         msleep(10);
     }
 }

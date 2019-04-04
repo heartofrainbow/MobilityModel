@@ -13,41 +13,10 @@ using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-//random_device rd;
-//default_random_engine e(rd());
 random_walk_node::random_walk_node(int n):node(n){
     this->id = n;
 }
 
-//double random_walk_node::getx(){
-//    return x;
-//}
-//double random_walk_node::gety(){
-//    return y;
-//}
-//double random_walk_node::getv(){
-//    return v;
-//}
-//double random_walk_node::getd(){
-//    return d;
-//}
-//void random_walk_node::setx(double x){
-//    this->x = x;
-//}
-//void random_walk_node::sety(double y){
-//    this->y = y;
-//}
-//void random_walk_node::setv(double v){
-//    this->v = v;
-//}
-//void random_walk_node::setd(double d){
-//    if(d<0){
-//        d += 2*M_PI;
-//    }else if(d>=2*M_PI){
-//        d -= 2*M_PI;
-//    }
-//    this->d = d;
-//}
 void random_walk_node::update(double time){   //parameter time is in second
         if (this->x <= XMIN) {      //If random_walk_node hit the XMIN bound then reflect
             this->x = 2*XMIN - this->x;     //Fix out of bound bug: if OutOfBound then mirror
@@ -92,7 +61,6 @@ void random_walk_node::run(){
     y = randomY(e);
     v = randomVel(e);
     d = randomDir(e);
-//    double interval = 1.0;        //Update random_walk_node information every $interval second
     double timeout = 10.0;        //Change random_walk_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
@@ -106,10 +74,7 @@ void random_walk_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_walk_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
-    //str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id).arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
     points.replace(id,QPointF(this->getx(),this->gety()));
-//    emit(output(str));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();
@@ -122,14 +87,6 @@ void random_walk_node::run(){
         }
         loopTime=(loopEndTime-lastUpdate);
         this->update(loopTime.count()/1e6);
-//        if(tmpTime.count() >= interval*1e6){    //Show random_walk_node info every $interval second
-//            wholeTime = currentTime - baseTime;
-//            //printf("ID: %d\tTime: %.8f s\tLOC: x=%.8f\ty=%.8f\t\tVEL=%.8f\t\tDIR=%.8f\n",(int)QThread::currentThreadId(), wholeTime.count()/1e6,this->getx(),this->gety(),this->getv(),this->getd());
-////            str = QString("ID: %1\tTime: %2 s\tLOC: x=%3\ty=%4\t\tVEL=%5\t\tDIR=%6\n").arg(id)\
-////                    .arg(wholeTime.count()/1e6,0,'f',8).arg(this->getx(),0,'f',8).arg(this->gety(),0,'f',8).arg(this->getv(),0,'f',8).arg(this->getd(),0,'f',8);
-////            emit(output(str));
-//            lastShow = high_resolution_clock::now();
-//        }
         lastUpdate = high_resolution_clock::now();
         currentTime = high_resolution_clock::now();
         changeTime = currentTime-lastChange;

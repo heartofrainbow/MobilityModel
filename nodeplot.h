@@ -25,7 +25,6 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
 
 public slots:
-//    void on_OutputReceived(QString qs);
     void on_FlushNodes();
 private:
     Ui::NodePlot *ui;
@@ -37,7 +36,6 @@ private:
 class showNodes: public QThread{
     Q_OBJECT
 public:
-//    explicit showNodes();
     void run();
 
 signals:

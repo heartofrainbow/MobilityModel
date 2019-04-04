@@ -14,14 +14,5 @@ public:
     void reflect(int err);
     //node(QObject *parent=NULL);
     random_walk_node(int n);
-//signals:
-//    void output(QString qs);
-//private:
-//    double x,y;
-//    double v;
-//    double d;
-//    int lastErr = 0;
-//    int id;
-//    bool first = true;
 };
 #endif // RANDOM_WALK_NODE_H
