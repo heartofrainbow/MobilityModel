@@ -27,6 +27,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+    node.cpp \
     qcustomplot.cpp \
     nodeplot.cpp \
     random_walk_node.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
+    node.h \
     qcustomplot.h \
     nodeplot.h \
     publicvar.h \

@@ -18,6 +18,7 @@
 #include <QVector>
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QLegendMarker>
+#include <QDebug>
 
 
 

@@ -7,46 +7,47 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
-
+#include "node.h"
+#include <QDebug>
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
 //random_device rd;
 //default_random_engine e(rd());
-random_walk_node::random_walk_node(int n){
+random_walk_node::random_walk_node(int n):node(n){
     this->id = n;
 }
 
-double random_walk_node::getx(){
-    return x;
-}
-double random_walk_node::gety(){
-    return y;
-}
-double random_walk_node::getv(){
-    return v;
-}
-double random_walk_node::getd(){
-    return d;
-}
-void random_walk_node::setx(double x){
-    this->x = x;
-}
-void random_walk_node::sety(double y){
-    this->y = y;
-}
-void random_walk_node::setv(double v){
-    this->v = v;
-}
-void random_walk_node::setd(double d){
-    if(d<0){
-        d += 2*M_PI;
-    }else if(d>=2*M_PI){
-        d -= 2*M_PI;
-    }
-    this->d = d;
-}
+//double random_walk_node::getx(){
+//    return x;
+//}
+//double random_walk_node::gety(){
+//    return y;
+//}
+//double random_walk_node::getv(){
+//    return v;
+//}
+//double random_walk_node::getd(){
+//    return d;
+//}
+//void random_walk_node::setx(double x){
+//    this->x = x;
+//}
+//void random_walk_node::sety(double y){
+//    this->y = y;
+//}
+//void random_walk_node::setv(double v){
+//    this->v = v;
+//}
+//void random_walk_node::setd(double d){
+//    if(d<0){
+//        d += 2*M_PI;
+//    }else if(d>=2*M_PI){
+//        d -= 2*M_PI;
+//    }
+//    this->d = d;
+//}
 void random_walk_node::update(double time){   //parameter time is in second
         if (this->x <= XMIN) {      //If random_walk_node hit the XMIN bound then reflect
             this->x = 2*XMIN - this->x;     //Fix out of bound bug: if OutOfBound then mirror
