@@ -30,7 +30,8 @@ SOURCES += \
     qcustomplot.cpp \
     nodeplot.cpp \
     random_walk_node.cpp \
-    random_direction_node.cpp
+    random_direction_node.cpp \
+    random_waypoint_node.cpp
 
 HEADERS += \
     node.h \
@@ -38,7 +39,8 @@ HEADERS += \
     nodeplot.h \
     publicvar.h \
     random_walk_node.h \
-    random_direction_node.h
+    random_direction_node.h \
+    random_waypoint_node.h
 
 FORMS += \
     nodeplot.ui

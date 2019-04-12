@@ -19,6 +19,7 @@ public:
     void setd(double d);
     void update(double time);
     void reflect(int err);
+    bool isIn(double x, double a, double b);
     node(int n);
     //variables:
     double x,y;

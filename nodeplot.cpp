@@ -4,6 +4,7 @@
 #include "publicvar.h"
 #include "random_walk_node.h"
 #include "random_direction_node.h"
+#include "random_waypoint_node.h"
 
 #include <iostream>
 #include <random>
@@ -101,6 +102,12 @@ void NodePlot::on_pushButton_clicked()
             QThread::usleep(10);
             nd->start();
         }
+    }else if(type == 2){
+        for(int i=0;i<nNodes;i++){
+                    random_waypoint_node *nd = new random_waypoint_node(i);
+                    QThread::usleep(10);
+                    nd->start();
+        }
     }
     shower->start();
 }
@@ -131,5 +138,7 @@ void NodePlot::on_comboBox_currentIndexChanged(int index)
         type = 0;
     }else if(index == 1){
         type = 1;
+    }else if(index == 2){
+        type = 2;
     }
 }

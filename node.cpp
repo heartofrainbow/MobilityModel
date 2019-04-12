@@ -38,3 +38,13 @@ void node::setd(double d){
     }
     this->d = d;
 }
+bool node::isIn(double x, double a, double b){
+    if(a > b){
+        double tmp = a;
+        a = b;
+        b = tmp;
+    }
+    if(a <= x && x <= b){
+        return true;
+    }return false;
+}
