@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
+#include <QPointF>
 
 using namespace std;
 using std::chrono::high_resolution_clock;

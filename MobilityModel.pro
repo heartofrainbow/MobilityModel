@@ -26,7 +26,6 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
     node.cpp \
     qcustomplot.cpp \
     nodeplot.cpp \
@@ -34,7 +33,6 @@ SOURCES += \
     random_direction_node.cpp
 
 HEADERS += \
-        mainwindow.h \
     node.h \
     qcustomplot.h \
     nodeplot.h \
@@ -43,7 +41,6 @@ HEADERS += \
     random_direction_node.h
 
 FORMS += \
-        mainwindow.ui \
     nodeplot.ui
 
 # Default rules for deployment.

@@ -9,6 +9,7 @@
 #include <thread>
 #include "node.h"
 #include <QDebug>
+#include <QPointF>
 using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
