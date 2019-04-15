@@ -91,7 +91,7 @@ void gauss_markov_node::run(){
     y = randomY(e);
     v = randomVel(e);
     this->setd(randomDir(e));
-    qDebug()<<this->id<<"\t"<<this->getd()<<endl;
+    //qDebug()<<this->id<<"\t"<<this->getd()<<endl;
     double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
