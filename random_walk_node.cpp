@@ -44,7 +44,7 @@ void random_walk_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
            return;
        }
        if (err ==1 || err == 2) {
-           this->setd(dd<=M_PI/2?(M_PI-dd):(3*M_PI-dd));
+           this->setd(M_PI-dd);
            lastErr = err;
        } else if (err ==3 || err ==4) {
            this->setd(2*M_PI-dd);

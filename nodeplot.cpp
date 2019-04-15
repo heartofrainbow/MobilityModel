@@ -134,9 +134,9 @@ void NodePlot::on_pushButton_clicked()
 void NodePlot::on_pushButton_2_clicked()
 {
     running = false;
-    points.clear();
-    xx.clear();
-    yy.clear();
+//    points.clear();
+//    xx.clear();
+//    yy.clear();
 }
 
 void NodePlot::on_FlushNodes(){

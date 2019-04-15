@@ -17,6 +17,14 @@ using std::chrono::milliseconds;
 gauss_markov_node::gauss_markov_node(int n):node(n){
     this->id = n;
 }
+void gauss_markov_node::setdmean(double dm){
+    if(dm<0){
+        dm += 2*M_PI;
+    }else if(dm>=2*M_PI){
+        dm -= 2*M_PI;
+    }
+    dmean = dm;
+}
 
 void gauss_markov_node::update(double time){   //parameter time is in second
         if (this->x <= XMIN) {      //If gauss_markov_node hit the XMIN bound then reflect
@@ -44,10 +52,12 @@ void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMA
            return;
        }
        if (err ==1 || err == 2) {
-           this->setd(dd<=M_PI/2?(M_PI-dd):(3*M_PI-dd));
+           this->setd(M_PI-dd);
+           this->setdmean(M_PI-dmean);
            lastErr = err;
        } else if (err ==3 || err ==4) {
            this->setd(2*M_PI-dd);
+           this->setdmean(-dmean);
            lastErr = err;
        }
 }
@@ -63,7 +73,7 @@ void gauss_markov_node::run(){
     x = randomX(e);
     y = randomY(e);
     v = randomVel(e);
-    d = randomDir(e);
+    this->setd(randomDir(e));
     double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
@@ -98,7 +108,7 @@ void gauss_markov_node::run(){
 //            this->setv(randomVel(e));
 //            this->setd(randomDir(e));
             v = alpha*v + (1-alpha)*vmean + sqrt(1-alpha*alpha)*randomVr(e);
-            d = alpha*d + (1-alpha)*dmean + sqrt(1-alpha*alpha)*randomDr(e);
+            this->setd(alpha*d + (1-alpha)*dmean + sqrt(1-alpha*alpha)*randomDr(e));
             lastErr = 0;                //To avoid gauss_markov_node bouncing near the edge
         }
         msleep(10);

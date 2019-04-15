@@ -13,6 +13,7 @@ public:
     void run();
     void update(double time);
     void reflect(int err);
+    void setdmean(double dm);
     gauss_markov_node(int n);
 };
 
