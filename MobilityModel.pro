@@ -31,7 +31,8 @@ SOURCES += \
     nodeplot.cpp \
     random_walk_node.cpp \
     random_direction_node.cpp \
-    random_waypoint_node.cpp
+    random_waypoint_node.cpp \
+    gauss_markov_node.cpp
 
 HEADERS += \
     node.h \
@@ -40,7 +41,8 @@ HEADERS += \
     publicvar.h \
     random_walk_node.h \
     random_direction_node.h \
-    random_waypoint_node.h
+    random_waypoint_node.h \
+    gauss_markov_node.h
 
 FORMS += \
     nodeplot.ui

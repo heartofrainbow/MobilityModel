@@ -41,7 +41,7 @@ void random_waypoint_node::reflect(){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
     this->x = destx;
     this->y = desty;
     points.replace(id,QPointF(this->x,this->y));
-    sleep(2);
+    sleep(interval);
     lastErr=1;
 }
 
@@ -57,7 +57,6 @@ void random_waypoint_node::run(){
     desty = randomY(e);
     v = randomVel(e);
     d = atan2(desty-y,destx-x);
-    double timeout = 10.0;        //Change random_waypoint_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;

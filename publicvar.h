@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <random>
+#include <QPointF>
 
 using namespace std;
 extern QVector<QPointF> points;
@@ -18,6 +19,10 @@ extern double YMAX;
 extern double YMIN;
 extern double VMIN;
 extern double VMAX;
+extern double interval;
+extern double vmean;
+extern double dmean;
+extern double alpha;
 
 extern random_device rd;
 extern default_random_engine e;
