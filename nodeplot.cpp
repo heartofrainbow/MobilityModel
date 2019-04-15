@@ -44,6 +44,8 @@ double VMAX = 20;
 double vmean = 15;
 double dmean = 3.141592654;
 double alpha = 0.5;
+double xbuffer = (XMAX-XMIN)/10;
+double ybuffer = (YMAX-YMIN)/10;
 
 random_device rd;
 default_random_engine e(rd());
@@ -93,6 +95,8 @@ void NodePlot::on_pushButton_clicked()
     vmean = ui->input_VMEAN->text().toDouble();
     dmean = ui->input_DMEAN->text().toDouble();
     alpha = ui->input_alpha->text().toDouble();
+    xbuffer = (XMAX-YMIN)/10;
+    ybuffer = (YMAX-YMIN)/10;
     ui->customPlot->xAxis->setRange(XMIN, XMAX);
     ui->customPlot->yAxis->setRange(YMIN, YMAX);
     ui->customPlot->replot();

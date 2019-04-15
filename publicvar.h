@@ -24,6 +24,9 @@ extern double vmean;
 extern double dmean;
 extern double alpha;
 
+extern double xbuffer;
+extern double ybuffer;
+
 extern random_device rd;
 extern default_random_engine e;
 

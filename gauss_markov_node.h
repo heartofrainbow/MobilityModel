@@ -15,6 +15,8 @@ public:
     void reflect(int err);
     void setdmean(double dm);
     gauss_markov_node(int n);
+private:
+    double d_mean;
 };
 
 #endif // GAUSS_MARKOV_NODE_H

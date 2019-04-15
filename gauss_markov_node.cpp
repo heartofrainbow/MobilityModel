@@ -41,9 +41,21 @@ void gauss_markov_node::update(double time){   //parameter time is in second
             this->y = 2*YMAX - this->y;
             reflect(4);
         }
-        this->x += this->getv()*cos(this->getd())*time;
-        this->y += this->getv()*sin(this->getd())*time;
-        points.replace(id,QPointF(this->x,this->y));
+//    if(this->x >= (XMAX-xbuffer)){
+//        if(this->y >= (YMAX-ybuffer)) this->setdmean(1.25*M_PI);
+//        else if(this->y <= (YMIN+ybuffer)) this->setdmean(0.75*M_PI);
+//        else this->setdmean(M_PI);
+//    }else if(this->x <= (XMIN+xbuffer)){
+//        if(this->y >= (YMAX-ybuffer)) this->setdmean(1.75*M_PI);
+//        else if(this->y <= (YMIN+ybuffer)) this->setdmean(0.25*M_PI);
+//        else this->setdmean(0);
+//    }else {
+//        if(this->y >= (YMAX-ybuffer)) this->setdmean(1.5*M_PI);
+//        else if(this->y <= (YMIN+ybuffer)) this->setdmean(0.5*M_PI);
+//    }
+    this->x += this->getv()*cos(this->getd())*time;
+    this->y += this->getv()*sin(this->getd())*time;
+    points.replace(id,QPointF(this->x,this->y));
 }
 
 void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
@@ -52,21 +64,26 @@ void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMA
            return;
        }
        if (err ==1 || err == 2) {
-           this->setd(M_PI-dd);
-           this->setdmean(M_PI-dmean);
-           lastErr = err;
+           //this->setd(M_PI-dd);
+           this->d = M_PI-dd;
+           //this->setdmean(M_PI-dmean);
+           d_mean = M_PI-d_mean;
+           this->lastErr = err;
        } else if (err ==3 || err ==4) {
-           this->setd(2*M_PI-dd);
-           this->setdmean(-dmean);
-           lastErr = err;
+           //this->setd(2*M_PI-dd);
+           this->d = 2*M_PI-dd;
+           //this->setdmean(-dmean);
+           d_mean = -d_mean;
+           this->lastErr = err;
        }
 }
 
 void gauss_markov_node::run(){
+    d_mean = dmean;
     uniform_real_distribution<double> randomX(XMIN,XMAX);
     uniform_real_distribution<double> randomY(YMIN,YMAX);
     uniform_real_distribution<double> randomVel(VMIN,VMAX);
-    uniform_real_distribution<double> randomDir(0,2*M_PI);
+    uniform_real_distribution<double> randomDir(0,0.5*M_PI);
     normal_distribution<double> randomVr(0,1);
     normal_distribution<double> randomDr(0,1);
     QString str;
@@ -74,6 +91,7 @@ void gauss_markov_node::run(){
     y = randomY(e);
     v = randomVel(e);
     this->setd(randomDir(e));
+    qDebug()<<this->id<<"\t"<<this->getd()<<endl;
     double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
@@ -100,17 +118,20 @@ void gauss_markov_node::run(){
         }
         loopTime=(loopEndTime-lastUpdate);
         this->update(loopTime.count()/1e6);
+        //qDebug()<<this->getd()<<endl;
+        v = alpha*v + (1-alpha)*vmean + sqrt(1-alpha*alpha)*randomVr(e);
+        d = alpha*d + (1-alpha)*d_mean + sqrt(1-alpha*alpha)*randomDr(e);
+        this->lastErr = 0;
         lastUpdate = high_resolution_clock::now();
         currentTime = high_resolution_clock::now();
         changeTime = currentTime-lastChange;
-        if(changeTime.count() > timeout*1e6){       //Regenerate gauss_markov_node info every $timeout second
-            lastChange = currentTime;
-//            this->setv(randomVel(e));
-//            this->setd(randomDir(e));
-            v = alpha*v + (1-alpha)*vmean + sqrt(1-alpha*alpha)*randomVr(e);
-            this->setd(alpha*d + (1-alpha)*dmean + sqrt(1-alpha*alpha)*randomDr(e));
-            lastErr = 0;                //To avoid gauss_markov_node bouncing near the edge
-        }
+//        if(changeTime.count() > timeout*1e6){       //Regenerate gauss_markov_node info every $timeout second
+//            lastChange = currentTime;
+////            this->setv(randomVel(e));
+////            this->setd(randomDir(e));
+
+//            lastErr = 0;                //To avoid gauss_markov_node bouncing near the edge
+//        }
         msleep(10);
     }
 }
