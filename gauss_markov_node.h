@@ -17,6 +17,7 @@ public:
     gauss_markov_node(int n);
 private:
     double d_mean;
+    double p_mean;
 };
 
 #endif // GAUSS_MARKOV_NODE_H

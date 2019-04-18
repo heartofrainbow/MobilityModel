@@ -17,62 +17,35 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="6" column="0">
-       <widget class="QLabel" name="label">
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="input_ZMIN">
         <property name="text">
-         <string>Type</string>
+         <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="QLineEdit" name="input_VMAX">
+      <item row="9" column="3">
+       <widget class="QLineEdit" name="input_interval">
         <property name="text">
-         <string>20</string>
+         <string>2</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>ZMIN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>VMAX</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="3">
-       <widget class="QLineEdit" name="input_nNodes">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>50</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>VMIN</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="3">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>停止</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>XMAX</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
+      <item row="8" column="1">
        <widget class="QComboBox" name="comboBox">
         <item>
          <property name="text">
@@ -96,17 +69,38 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="3">
-       <widget class="QLineEdit" name="input_YMAX">
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>100</string>
+         <string>XMAX</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>XMIN</string>
+         <string>DMEAN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="input_XMIN">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>VMEAN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Type</string>
         </property>
        </widget>
       </item>
@@ -117,10 +111,55 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="input_XMIN">
+      <item row="11" column="3">
+       <widget class="QPushButton" name="pushButton_2">
         <property name="text">
-         <string>0</string>
+         <string>停止</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="input_XMAX">
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="4">
+       <widget class="QWidget" name="widget" native="true"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>XMIN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QLineEdit" name="input_DMEAN">
+        <property name="text">
+         <string>3.141592654</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>alpha</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>ZMAX</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="input_VMIN">
+        <property name="text">
+         <string>10</string>
         </property>
        </widget>
       </item>
@@ -132,37 +171,64 @@
        </widget>
       </item>
       <item row="5" column="0">
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>VMEAN</string>
+         <string>VMIN</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="input_VMEAN">
+      <item row="9" column="2">
+       <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>15</string>
+         <string>Interval</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QLineEdit" name="input_XMAX">
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="input_alpha">
+        <property name="text">
+         <string>0.5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>开始</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>nNodes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QLineEdit" name="input_nNodes">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLineEdit" name="input_YMAX">
         <property name="text">
          <string>100</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="input_VMIN">
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="input_VMEAN">
         <property name="text">
-         <string>10</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="QLineEdit" name="input_DMEAN">
-        <property name="text">
-         <string>3.141592654</string>
+         <string>15</string>
         </property>
        </widget>
       </item>
@@ -173,57 +239,33 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="label_10">
+      <item row="4" column="3">
+       <widget class="QLineEdit" name="input_ZMAX">
         <property name="text">
-         <string>DMEAN</string>
+         <string>100</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="1">
-       <widget class="QPushButton" name="pushButton">
+      <item row="5" column="3">
+       <widget class="QLineEdit" name="input_VMAX">
         <property name="text">
-         <string>开始</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>nNodes</string>
+         <string>20</string>
         </property>
        </widget>
       </item>
       <item row="7" column="0">
-       <widget class="QLabel" name="label_11">
+       <widget class="QLabel" name="label_15">
         <property name="text">
-         <string>alpha</string>
+         <string>PMEAN</string>
         </property>
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QLineEdit" name="input_alpha">
+       <widget class="QLineEdit" name="input_PMEAN">
         <property name="text">
-         <string>0.5</string>
+         <string>‭1.570796327‬</string>
         </property>
        </widget>
-      </item>
-      <item row="7" column="2">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Interval</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="QLineEdit" name="input_interval">
-        <property name="text">
-         <string>2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="4">
-       <widget class="QWidget" name="widget" native="true"/>
       </item>
      </layout>
     </item>

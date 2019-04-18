@@ -41,6 +41,13 @@ void gauss_markov_node::update(double time){   //parameter time is in second
             this->y = 2*YMAX - this->y;
             reflect(4);
         }
+        if (this->z <=ZMIN){
+            this->z = 2*ZMIN - this->z;
+            reflect(5);
+        }else if(this->z >= ZMAX){
+            this->z = 2*ZMAX - this->z;
+            reflect(6);
+        }
 //    if(this->x >= (XMAX-xbuffer)){
 //        if(this->y >= (YMAX-ybuffer)) this->setdmean(1.25*M_PI);
 //        else if(this->y <= (YMIN+ybuffer)) this->setdmean(0.75*M_PI);
@@ -53,13 +60,15 @@ void gauss_markov_node::update(double time){   //parameter time is in second
 //        if(this->y >= (YMAX-ybuffer)) this->setdmean(1.5*M_PI);
 //        else if(this->y <= (YMIN+ybuffer)) this->setdmean(0.5*M_PI);
 //    }
-    this->x += this->getv()*cos(this->getd())*time;
-    this->y += this->getv()*sin(this->getd())*time;
-    points->replace(id,QVector3D(this->x,this->y,0));
+    this->x += this->getv()*cos(this->getd())*sin(this->getp())*time;
+    this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
+    this->z += this->getv()*cos(this->getp())*time;
+    points->replace(id,QVector3D(this->x,this->y,this->z));
 }
 
 void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
        double dd = this->getd();
+       double pp = this->getp();
        if (err == lastErr) {           //In case gauss_markov_node reflect forever near an edge
            return;
        }
@@ -75,22 +84,31 @@ void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMA
            //this->setdmean(-dmean);
            d_mean = -d_mean;
            this->lastErr = err;
+       } else if(err == 5 || err == 6){
+           this->p = M_PI - pp;
+           p_mean = M_PI - p_mean;
        }
 }
 
 void gauss_markov_node::run(){
     d_mean = dmean;
+    p_mean = pmean;
     uniform_real_distribution<double> randomX(XMIN,XMAX);
     uniform_real_distribution<double> randomY(YMIN,YMAX);
+    uniform_real_distribution<double> randomZ(ZMIN,ZMAX);
     uniform_real_distribution<double> randomVel(VMIN,VMAX);
-    uniform_real_distribution<double> randomDir(0,0.5*M_PI);
+    uniform_real_distribution<double> randomDir(0,2*M_PI);
+    uniform_real_distribution<double> randomPitch(0,M_PI);
     normal_distribution<double> randomVr(0,1);
     normal_distribution<double> randomDr(0,1);
+    normal_distribution<double> randomPr(0,1);
     QString str;
     x = randomX(e);
     y = randomY(e);
+    z = randomZ(e);
     v = randomVel(e);
     this->setd(randomDir(e));
+    this->setp(randomPitch(e));
     //qDebug()<<this->id<<"\t"<<this->getd()<<endl;
     double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
@@ -105,7 +123,7 @@ void gauss_markov_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when gauss_markov_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points->replace(id,QVector3D(this->getx(),this->gety(),0));
+    points->replace(id,QVector3D(this->getx(),this->gety(),this->getz()));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();
@@ -121,6 +139,7 @@ void gauss_markov_node::run(){
         //qDebug()<<this->getd()<<endl;
         v = alpha*v + (1-alpha)*vmean + sqrt(1-alpha*alpha)*randomVr(e);
         d = alpha*d + (1-alpha)*d_mean + sqrt(1-alpha*alpha)*randomDr(e);
+        p = alpha*p + (1-alpha)*p_mean + sqrt(1-alpha*alpha)*randomPr(e);
         this->lastErr = 0;
         lastUpdate = high_resolution_clock::now();
         currentTime = high_resolution_clock::now();

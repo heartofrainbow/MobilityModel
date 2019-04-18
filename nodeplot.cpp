@@ -45,13 +45,16 @@ double XMAX = 100;
 double XMIN = 0;
 double YMAX = 100;
 double YMIN = 0;
+double ZMIN = 0;
+double ZMAX = 100;
 double VMIN = 10;
 double VMAX = 20;
 double vmean = 15;
 double dmean = 3.141592654;
+double pmean = 1.570796327;
 double alpha = 0.5;
-double xbuffer = (XMAX-XMIN)/10;
-double ybuffer = (YMAX-YMIN)/10;
+//double xbuffer = (XMAX-XMIN)/10;
+//double ybuffer = (YMAX-YMIN)/10;
 
 random_device rd;
 default_random_engine e(rd());
@@ -77,32 +80,22 @@ NodePlot::NodePlot(QWidget *parent) :
     graph->axisX()->setTitle("X");
     graph->axisY()->setTitle("Y");
     graph->axisZ()->setTitle("Z");
+    graph->axisX()->setTitleVisible(true);
+    graph->axisY()->setTitleVisible(true);
+    graph->axisZ()->setTitleVisible(true);
 //    graph->axisX()->setAutoAdjustRange(true);
 //    graph->axisY()->setAutoAdjustRange(true);
 //    graph->axisZ()->setAutoAdjustRange(true);
-
-    //点
-
-    //点,大小
     series->setItemSize(0.05);
-    //点,坐标
-
-//    data << QVector3D(0.5f, 0.5f, 0.5f);
-    //创建一个widget,将坐标系添加进去
     QWidget *container = QWidget::createWindowContainer(graph);
-
-    //判断是否graph(opengl)初始化
     if (!graph->hasContext()) {
         QMessageBox msgBox;
         msgBox.setText("Couldn't initialize the OpenGL context.");
         msgBox.exec();
     }
     QHBoxLayout *hLayout = new QHBoxLayout(ui->widget);
-    //垂直布局
     QVBoxLayout *vLayout = new QVBoxLayout();
-    //将container添加到水平布局中
     hLayout->addWidget(container, 1);
-//    points.append(QVector3D(0, 0, 0));
     points->resize(0);
     series->dataProxy()->addItems(*points);
     graph->addSeries(series);
@@ -134,20 +127,23 @@ void NodePlot::on_pushButton_clicked()
     XMAX = ui->input_XMAX->text().toDouble();
     YMIN = ui->input_YMIN->text().toDouble();
     YMAX = ui->input_YMAX->text().toDouble();
+    ZMIN = ui->input_ZMIN->text().toDouble();
+    ZMAX = ui->input_ZMAX->text().toDouble();
     VMIN = ui->input_VMIN->text().toDouble();
     VMAX = ui->input_VMAX->text().toDouble();
     interval = ui->input_interval->text().toDouble();
     vmean = ui->input_VMEAN->text().toDouble();
     dmean = ui->input_DMEAN->text().toDouble();
+    pmean = ui->input_PMEAN->text().toDouble();
     alpha = ui->input_alpha->text().toDouble();
-    xbuffer = (XMAX-YMIN)/10;
-    ybuffer = (YMAX-YMIN)/10;
+//    xbuffer = (XMAX-YMIN)/10;
+//    ybuffer = (YMAX-YMIN)/10;
    // ui->customPlot->xAxis->setRange(XMIN, XMAX);
     //ui->customPlot->yAxis->setRange(YMIN, YMAX);
     //ui->customPlot->replot();
     graph->axisX()->setRange(XMIN, XMAX);
     graph->axisY()->setRange(YMIN, YMAX);
-    graph->axisZ()->setRange(0, 480);
+    graph->axisZ()->setRange(ZMIN, ZMAX);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
