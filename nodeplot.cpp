@@ -21,7 +21,7 @@
 //#include <QtCharts/QScatterSeries>
 //#include <QtCharts/QLegendMarker>
 #include <QtDataVisualization>
-#include <q3dscatter.h>
+#include <Q3DScatter>
 #include <qmessagebox.h>
 
 using namespace QtDataVisualization;
@@ -53,8 +53,9 @@ double vmean = 15;
 double dmean = 3.141592654;
 double pmean = 1.570796327;
 double alpha = 0.5;
-//double xbuffer = (XMAX-XMIN)/10;
-//double ybuffer = (YMAX-YMIN)/10;
+double xbuffer = (XMAX-XMIN)/10;
+double ybuffer = (YMAX-YMIN)/10;
+double zbuffer = (ZMAX-ZMIN)/10;
 
 random_device rd;
 default_random_engine e(rd());
@@ -136,14 +137,15 @@ void NodePlot::on_pushButton_clicked()
     dmean = ui->input_DMEAN->text().toDouble();
     pmean = ui->input_PMEAN->text().toDouble();
     alpha = ui->input_alpha->text().toDouble();
-//    xbuffer = (XMAX-YMIN)/10;
-//    ybuffer = (YMAX-YMIN)/10;
+    xbuffer = (XMAX-YMIN)/10;
+    ybuffer = (YMAX-YMIN)/10;
+    zbuffer = (ZMAX-ZMIN)/10;
    // ui->customPlot->xAxis->setRange(XMIN, XMAX);
     //ui->customPlot->yAxis->setRange(YMIN, YMAX);
     //ui->customPlot->replot();
-    graph->axisX()->setRange(1.1*XMIN, 1.1*XMAX);
-    graph->axisY()->setRange(1.1*YMIN, 1.1*YMAX);
-    graph->axisZ()->setRange(1.1*ZMIN, 1.1*ZMAX);
+    graph->axisX()->setRange(XMIN-xbuffer, XMAX+xbuffer);
+    graph->axisY()->setRange(YMIN-ybuffer, YMAX+ybuffer);
+    graph->axisZ()->setRange(ZMIN-zbuffer, ZMAX+zbuffer);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
@@ -152,25 +154,25 @@ void NodePlot::on_pushButton_clicked()
     if(type == 0){
         for(int i=0;i<nNodes;i++){
             random_walk_node *nd = new random_walk_node(i);
-            QThread::usleep(10);
+//            QThread::usleep(10);
             nd->start();
         }
     }else if(type ==1){
         for(int i=0;i<nNodes;i++){
             random_direction_node *nd = new random_direction_node(i);
-            QThread::usleep(10);
+//            QThread::usleep(10);
             nd->start();
         }
     }else if(type == 2){
         for(int i=0;i<nNodes;i++){
                     random_waypoint_node *nd = new random_waypoint_node(i);
-                    QThread::usleep(10);
+//                    QThread::usleep(10);
                     nd->start();
         }
     }else if(type ==3){
         for(int i=0;i<nNodes;i++){
             gauss_markov_node *nd = new gauss_markov_node(i);
-            QThread::usleep(10);
+//            QThread::usleep(10);
             nd->start();
         }
     }
@@ -197,7 +199,7 @@ void NodePlot::on_FlushNodes(){
 void showNodes::run(){
     while(running == true){
         emit(flushNodes());
-        msleep(100);
+        msleep(50);
     }
 }
 

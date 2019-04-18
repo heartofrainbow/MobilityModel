@@ -64,6 +64,7 @@ void gauss_markov_node::update(double time){   //parameter time is in second
     this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
     this->z += this->getv()*cos(this->getp())*time;
     points->replace(id,QVector3D(this->x,this->y,this->z));
+//    series->dataProxy()->resetArray(points);
 }
 
 void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
@@ -152,7 +153,7 @@ void gauss_markov_node::run(){
 
 //            lastErr = 0;                //To avoid gauss_markov_node bouncing near the edge
 //        }
-        msleep(10);
+        msleep(20);
     }
 }
 

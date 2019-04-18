@@ -5,10 +5,11 @@
 #include <random>
 #include <QPointF>
 #include <QScatterDataArray>
+#include <Q3DScatter>
 
 using namespace std;
 extern QtDataVisualization::QScatterDataArray *points;
-
+extern QtDataVisualization::QScatter3DSeries *series;
 
 extern bool running;
 extern int nNodes;
