@@ -16,6 +16,8 @@ public:
 private:
     double destx;
     double desty;
+    double destz;
+//    double dx,dy,dz;
 };
 
 #endif // RANDOM_WAYPOINT_NODE_H

@@ -118,7 +118,7 @@ void NodePlot::on_pushButton_clicked()
 //        points.clear();
 //        xx.clear();
 //        yy.clear();
-        QMessageBox::information(this,"information","You have to press \"stop\" before running another simulation!",QMessageBox::Ok);
+        QMessageBox::information(this,"提示","在运行下一次仿真时请先点击停止按钮以停止本次仿真！",QMessageBox::Ok);
         return;
     }
     points->clear();

@@ -8,7 +8,6 @@
 #include <chrono>
 #include <thread>
 #include "node.h"
-#include <QDebug>
 #include <QPointF>
 using namespace std;
 using std::chrono::high_resolution_clock;
@@ -31,16 +30,28 @@ void random_waypoint_node::update(double time){   //parameter time is in second
     }else if(d == 3*M_PI/2 && y < desty){
         reflect();
         return;
+    }else if(p < M_PI/2 && z > destz){
+        reflect();
+        return;
+    }else if(p > M_PI/2 && z < destz){
+        reflect();
+        return;
     }
-        this->x += this->getv()*cos(this->getd())*time;
-        this->y += this->getv()*sin(this->getd())*time;
-        points->replace(id,QVector3D(this->x,this->y,0));
+//    if((desty - y) * d <0 || (destx -x) * d <0 ||  (destz -z) * p <0){
+//        reflect();
+//        return;
+//    }
+    this->x += this->getv()*cos(this->getd())*sin(this->getp())*time;
+    this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
+    this->z += this->getv()*cos(this->getp())*time;
+        points->replace(id,QVector3D(this->x,this->y,this->z));
 }
 
 void random_waypoint_node::reflect(){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
     this->x = destx;
     this->y = desty;
-    points->replace(id,QVector3D(this->x,this->y,0));
+    this->z = destz;
+    points->replace(id,QVector3D(this->x,this->y,this->z));
     sleep(interval);
     lastErr=1;
 }
@@ -48,15 +59,19 @@ void random_waypoint_node::reflect(){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
 void random_waypoint_node::run(){
     uniform_real_distribution<double> randomX(XMIN,XMAX);
     uniform_real_distribution<double> randomY(YMIN,YMAX);
+    uniform_real_distribution<double> randomZ(ZMIN,ZMAX);
     uniform_real_distribution<double> randomVel(VMIN,VMAX);
     uniform_real_distribution<double> randomDir(0,2*M_PI);
-    QString str;
+    uniform_real_distribution<double> randomPitch(0,M_PI);
     x = randomX(e);
     y = randomY(e);
+    z = randomZ(e);
     destx = randomX(e);
     desty = randomY(e);
+    destz = randomZ(e);
     v = randomVel(e);
     d = atan2(desty-y,destx-x);
+    p = acos((destz-z)/(sqrt((desty-y)*(desty-y)+(destx-x)*(destx-x)+(destz -z)*(destz -z))));
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;
@@ -69,7 +84,7 @@ void random_waypoint_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_waypoint_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points->replace(id,QVector3D(this->getx(),this->gety(),0));
+    points->replace(id,QVector3D(this->getx(),this->gety(),this->getz()));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();
@@ -89,8 +104,10 @@ void random_waypoint_node::run(){
             lastChange = currentTime;
             destx = randomX(e);
             desty = randomY(e);
+            destz = randomZ(e);
             this->setv(randomVel(e));
             this->setd(atan2(desty-y,destx-x));
+            this->setp(acos((destz-z)/(sqrt((desty-y)*(desty-y)+(destx-x)*(destx-x)+(destz -z)*(destz -z)))));
             lastErr = 0;                //To avoid random_waypoint_node bouncing near the edge
         }
         msleep(10);
