@@ -141,16 +141,14 @@ void NodePlot::on_pushButton_clicked()
    // ui->customPlot->xAxis->setRange(XMIN, XMAX);
     //ui->customPlot->yAxis->setRange(YMIN, YMAX);
     //ui->customPlot->replot();
-    graph->axisX()->setRange(XMIN, XMAX);
-    graph->axisY()->setRange(YMIN, YMAX);
-    graph->axisZ()->setRange(ZMIN, ZMAX);
+    graph->axisX()->setRange(1.1*XMIN, 1.1*XMAX);
+    graph->axisY()->setRange(1.1*YMIN, 1.1*YMAX);
+    graph->axisZ()->setRange(1.1*ZMIN, 1.1*ZMAX);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
     running = true;
-    for(int i=0;i<nNodes;i++){
-        points->append(QVector3D(0,0,0));
-    }
+    points->resize(nNodes);
     if(type == 0){
         for(int i=0;i<nNodes;i++){
             random_walk_node *nd = new random_walk_node(i);

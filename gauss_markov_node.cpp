@@ -87,6 +87,7 @@ void gauss_markov_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMA
        } else if(err == 5 || err == 6){
            this->p = M_PI - pp;
            p_mean = M_PI - p_mean;
+           this->lastErr = err;
        }
 }
 

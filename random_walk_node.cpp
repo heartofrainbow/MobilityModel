@@ -33,13 +33,22 @@ void random_walk_node::update(double time){   //parameter time is in second
             this->y = 2*YMAX - this->y;
             reflect(4);
         }
-        this->x += this->getv()*cos(this->getd())*time;
-        this->y += this->getv()*sin(this->getd())*time;
-        points->replace(id,QVector3D(this->x,this->y,0));
+        if (this->z <=ZMIN){
+            this->z = 2*ZMIN - this->z;
+            reflect(5);
+        }else if(this->z >= ZMAX){
+            this->z = 2*ZMAX - this->z;
+            reflect(6);
+        }
+        this->x += this->getv()*cos(this->getd())*sin(this->getp())*time;
+        this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
+        this->z += this->getv()*cos(this->getp())*time;
+        points->replace(id,QVector3D(this->x,this->y,this->getz()));
 }
 
 void random_walk_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
        double dd = this->getd();
+       double pp = this->getp();
        if (err == lastErr) {           //In case random_walk_node reflect forever near an edge
            return;
        }
@@ -49,19 +58,27 @@ void random_walk_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
        } else if (err ==3 || err ==4) {
            this->setd(2*M_PI-dd);
            lastErr = err;
-       }
+       } else if (err ==5 || err == 6) {
+           this->p = M_PI - pp;
+           lastErr = err;
+
+}
 }
 
 void random_walk_node::run(){
     uniform_real_distribution<double> randomX(XMIN,XMAX);
     uniform_real_distribution<double> randomY(YMIN,YMAX);
+    uniform_real_distribution<double> randomZ(ZMIN,ZMAX);
     uniform_real_distribution<double> randomVel(VMIN,VMAX);
     uniform_real_distribution<double> randomDir(0,2*M_PI);
+    uniform_real_distribution<double> randomPitch(0,M_PI);
     QString str;
     x = randomX(e);
     y = randomY(e);
+    z = randomZ(e);
     v = randomVel(e);
     d = randomDir(e);
+    p = randomPitch(e);
     double timeout = 10.0;        //Change random_walk_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
@@ -75,7 +92,7 @@ void random_walk_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_walk_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points->replace(id,QVector3D(this->getx(),this->gety(),0));
+    points->replace(id,QVector3D(this->getx(),this->gety(),this->getz()));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();
@@ -95,6 +112,7 @@ void random_walk_node::run(){
             lastChange = currentTime;
             this->setv(randomVel(e));
             this->setd(randomDir(e));
+            this->setp(randomPitch(e));
             lastErr = 0;                //To avoid random_walk_node bouncing near the edge
         }
         msleep(10);
