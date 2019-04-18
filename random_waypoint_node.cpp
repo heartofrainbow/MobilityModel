@@ -34,13 +34,13 @@ void random_waypoint_node::update(double time){   //parameter time is in second
     }
         this->x += this->getv()*cos(this->getd())*time;
         this->y += this->getv()*sin(this->getd())*time;
-        points.replace(id,QPointF(this->x,this->y));
+        points->replace(id,QVector3D(this->x,this->y,0));
 }
 
 void random_waypoint_node::reflect(){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX
     this->x = destx;
     this->y = desty;
-    points.replace(id,QPointF(this->x,this->y));
+    points->replace(id,QVector3D(this->x,this->y,0));
     sleep(interval);
     lastErr=1;
 }
@@ -69,7 +69,7 @@ void random_waypoint_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_waypoint_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points.replace(id,QPointF(this->getx(),this->gety()));
+    points->replace(id,QVector3D(this->getx(),this->gety(),0));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();

@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += datavisualization
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -27,7 +29,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     node.cpp \
-    qcustomplot.cpp \
     nodeplot.cpp \
     random_walk_node.cpp \
     random_direction_node.cpp \
@@ -36,7 +37,6 @@ SOURCES += \
 
 HEADERS += \
     node.h \
-    qcustomplot.h \
     nodeplot.h \
     publicvar.h \
     random_walk_node.h \

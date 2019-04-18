@@ -35,7 +35,7 @@ void random_direction_node::update(double time){   //parameter time is in second
         }
         this->x += this->getv()*cos(this->getd())*time;
         this->y += this->getv()*sin(this->getd())*time;
-        points.replace(id,QPointF(this->x,this->y));
+        points->replace(id,QVector3D(this->x,this->y,0));
         if(reflected == true){
             sleep(interval);
             reflected = false;
@@ -90,7 +90,7 @@ void random_direction_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_direction_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points.replace(id,QPointF(this->getx(),this->gety()));
+    points->replace(id,QVector3D(this->getx(),this->gety(),0));
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();

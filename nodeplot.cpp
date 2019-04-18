@@ -13,25 +13,31 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
-
+#include <QDebug>
 
 #include <QGraphicsView>
 #include <QPointF>
 #include <QVector>
-#include <QtCharts/QScatterSeries>
-#include <QtCharts/QLegendMarker>
-#include <QDebug>
+//#include <QtCharts/QScatterSeries>
+//#include <QtCharts/QLegendMarker>
+#include <QtDataVisualization>
+#include <q3dscatter.h>
+#include <qmessagebox.h>
+
+using namespace QtDataVisualization;
 
 
-QVector<QPointF> points;
-QVector<double> xx(0);
-QVector<double> yy(0);
+
+QScatterDataArray *points = new QScatterDataArray();
+Q3DScatter *graph;
+QScatter3DSeries *series;
+
 bool running = false;
 int nNodes = 0;
 int type = 0;   //0=RandomWalk, 1=RandomDirection
 double interval = 2;
 
-using namespace std;
+
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
@@ -57,16 +63,52 @@ NodePlot::NodePlot(QWidget *parent) :
     ui(new Ui::NodePlot)
 {
     ui->setupUi(this);
-    ui->customPlot->addGraph();
-    ui->customPlot->xAxis->setLabel("x");
-    ui->customPlot->yAxis->setLabel("y");
-    QCPScatterStyle myScatter;
-    myScatter.setShape(QCPScatterStyle::ssDisc);
-    myScatter.setPen(QPen(Qt::blue));
-    myScatter.setBrush(Qt::white);
-    myScatter.setSize(10);
-    ui->customPlot->graph(0)->setScatterStyle(myScatter);
-    ui->customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    graph = new Q3DScatter();
+    series = new QScatter3DSeries;
+    graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetBehindLow);
+    graph->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
+    graph->axisX()->setRange(0, 480);
+    graph->axisY()->setRange(0, 480);
+    graph->axisZ()->setRange(0, 480);
+//    graph->axisX()->setSegmentCount(int(480/20));
+//    graph->axisY()->setSegmentCount(int(480/20));
+//    graph->axisZ()->setSegmentCount(int(480/20));
+    graph->activeTheme()->setType(Q3DTheme::ThemeQt);
+    graph->axisX()->setTitle("X");
+    graph->axisY()->setTitle("Y");
+    graph->axisZ()->setTitle("Z");
+//    graph->axisX()->setAutoAdjustRange(true);
+//    graph->axisY()->setAutoAdjustRange(true);
+//    graph->axisZ()->setAutoAdjustRange(true);
+
+    //点
+
+    //点,大小
+    series->setItemSize(0.05);
+    //点,坐标
+
+//    data << QVector3D(0.5f, 0.5f, 0.5f);
+    //创建一个widget,将坐标系添加进去
+    QWidget *container = QWidget::createWindowContainer(graph);
+
+    //判断是否graph(opengl)初始化
+    if (!graph->hasContext()) {
+        QMessageBox msgBox;
+        msgBox.setText("Couldn't initialize the OpenGL context.");
+        msgBox.exec();
+    }
+    QHBoxLayout *hLayout = new QHBoxLayout(ui->widget);
+    //垂直布局
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    //将container添加到水平布局中
+    hLayout->addWidget(container, 1);
+//    points.append(QVector3D(0, 0, 0));
+    points->resize(0);
+    series->dataProxy()->addItems(*points);
+    graph->addSeries(series);
+    graph->removeSeries(series);
+    series->dataProxy()->addItems(*points);
+    graph->addSeries(series);
 
 }
 
@@ -85,6 +127,9 @@ void NodePlot::on_pushButton_clicked()
         QMessageBox::information(this,"information","You have to press \"stop\" before running another simulation!",QMessageBox::Ok);
         return;
     }
+    points->clear();
+    //ui->customPlot->graph(0)->setData(xx, yy);
+    //ui->customPlot->replot();
     XMIN = ui->input_XMIN->text().toDouble();
     XMAX = ui->input_XMAX->text().toDouble();
     YMIN = ui->input_YMIN->text().toDouble();
@@ -97,16 +142,19 @@ void NodePlot::on_pushButton_clicked()
     alpha = ui->input_alpha->text().toDouble();
     xbuffer = (XMAX-YMIN)/10;
     ybuffer = (YMAX-YMIN)/10;
-    ui->customPlot->xAxis->setRange(XMIN, XMAX);
-    ui->customPlot->yAxis->setRange(YMIN, YMAX);
-    ui->customPlot->replot();
+   // ui->customPlot->xAxis->setRange(XMIN, XMAX);
+    //ui->customPlot->yAxis->setRange(YMIN, YMAX);
+    //ui->customPlot->replot();
+    graph->axisX()->setRange(XMIN, XMAX);
+    graph->axisY()->setRange(YMIN, YMAX);
+    graph->axisZ()->setRange(0, 480);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
     running = true;
-    points.resize(nNodes);
-    xx.resize(nNodes);
-    yy.resize(nNodes);
+    for(int i=0;i<nNodes;i++){
+        points->append(QVector3D(0,0,0));
+    }
     if(type == 0){
         for(int i=0;i<nNodes;i++){
             random_walk_node *nd = new random_walk_node(i);
@@ -144,12 +192,13 @@ void NodePlot::on_pushButton_2_clicked()
 }
 
 void NodePlot::on_FlushNodes(){
-    for(int i=0;i<nNodes; i++){
-        xx.replace(i,points.at(i).x());
-        yy.replace(i,points.at(i).y());
-    }
-    ui->customPlot->graph(0)->setData(xx, yy);
-    ui->customPlot->replot();
+//    for(int i=0;i<nNodes; i++){
+//        xx.replace(i,points.at(i).x());
+//        yy.replace(i,points.at(i).y());
+//    }
+   // ui->customPlot->graph(0)->setData(xx, yy);
+    //ui->customPlot->replot();
+    series->dataProxy()->resetArray(points);
 }
 void showNodes::run(){
     while(running == true){

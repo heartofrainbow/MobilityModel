@@ -4,12 +4,11 @@
 #include <QVector>
 #include <random>
 #include <QPointF>
+#include <QScatterDataArray>
 
 using namespace std;
-extern QVector<QPointF> points;
+extern QtDataVisualization::QScatterDataArray *points;
 
-extern QVector<double> xx;
-extern QVector<double> yy;
 
 extern bool running;
 extern int nNodes;
