@@ -10,7 +10,10 @@
 #include "node.h"
 #include <QDebug>
 #include <QPointF>
-using namespace std;
+#include <utility>
+
+#define __NO_STD_VECTOR
+
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 

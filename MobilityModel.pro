@@ -26,6 +26,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+
+LIBS+= -lOpenCL
+LIBS+= -L"C:\Program Files (x86)\IntelSWTools\OpenCL\sdk\lib\x64"
+INCLUDEPATH += "C:\Program Files (x86)\IntelSWTools\OpenCL\sdk\include"
+
 SOURCES += \
         main.cpp \
     node.cpp \

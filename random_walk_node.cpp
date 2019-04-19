@@ -10,7 +10,11 @@
 #include "node.h"
 #include <QDebug>
 #include <QPointF>
-using namespace std;
+#include <utility>
+#include <CL/cl.hpp>
+#define __NO_STD_VECTOR
+
+//using namespace std;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
@@ -80,7 +84,6 @@ void random_walk_node::run(){
     v = randomVel(e);
     d = randomDir(e);
     p = randomPitch(e);
-    double timeout = 10.0;        //Change random_walk_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;
@@ -109,7 +112,7 @@ void random_walk_node::run(){
         lastUpdate = high_resolution_clock::now();
         currentTime = high_resolution_clock::now();
         changeTime = currentTime-lastChange;
-        if(changeTime.count() > timeout*1e6){       //Regenerate random_walk_node info every $timeout second
+        if(changeTime.count() > interval*1e6){       //Regenerate random_walk_node info every $timeout second
             lastChange = currentTime;
             this->setv(randomVel(e));
             this->setd(randomDir(e));
