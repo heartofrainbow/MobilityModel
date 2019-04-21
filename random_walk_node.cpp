@@ -10,9 +10,7 @@
 #include "node.h"
 #include <QDebug>
 #include <QPointF>
-#include <utility>
-#include <CL/cl.hpp>
-#define __NO_STD_VECTOR
+
 
 //using namespace std;
 using std::chrono::high_resolution_clock;

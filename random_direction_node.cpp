@@ -8,8 +8,6 @@
 #include <chrono>
 #include <thread>
 #include <QPointF>
-#include <utility>
-#define __NO_STD_VECTOR
 
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;

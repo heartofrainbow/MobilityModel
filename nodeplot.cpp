@@ -23,8 +23,6 @@
 #include <QtDataVisualization>
 #include <Q3DScatter>
 #include <qmessagebox.h>
-#include <utility>
-#define __NO_STD_VECTOR
 
 
 using namespace QtDataVisualization;
