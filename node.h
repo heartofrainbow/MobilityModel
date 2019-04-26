@@ -24,6 +24,7 @@ public:
     void update(double time);
     void reflect(int err);
     bool isIn(double x, double a, double b);
+    void calc(int id, double x, double y, double z);        //convert XYZ to longtitude,latitude&height
     node(int n);
     //variables:
     double x,y,z;

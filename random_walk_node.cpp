@@ -45,7 +45,7 @@ void random_walk_node::update(double time){   //parameter time is in second
         this->x += this->getv()*cos(this->getd())*sin(this->getp())*time;
         this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
         this->z += this->getv()*cos(this->getp())*time;
-        points->replace(id,QVector3D(this->x,this->y,this->getz()));
+        calc(id,this->x,this->y,this->z);
 //        series->dataProxy()->resetArray(points);
 }
 
@@ -94,7 +94,7 @@ void random_walk_node::run(){
     high_resolution_clock::time_point lastShow = lastUpdate;    //Time when random_walk_node info shown
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     wholeTime = currentTime-baseTime;
-    points->replace(id,QVector3D(this->getx(),this->gety(),this->getz()));
+    calc(id,this->x,this->y,this->z);
     //initial output
     while(running == true){
         currentTime = high_resolution_clock::now();

@@ -85,9 +85,9 @@ NodePlot::NodePlot(QWidget *parent) :
     graph->axisX()->setTitleVisible(true);
     graph->axisY()->setTitleVisible(true);
     graph->axisZ()->setTitleVisible(true);
-//    graph->axisX()->setAutoAdjustRange(true);
-//    graph->axisY()->setAutoAdjustRange(true);
-//    graph->axisZ()->setAutoAdjustRange(true);
+    graph->axisX()->setAutoAdjustRange(true);
+    graph->axisY()->setAutoAdjustRange(true);
+    graph->axisZ()->setAutoAdjustRange(true);
     series->setItemSize(0.05);
     QWidget *container = QWidget::createWindowContainer(graph);
     if (!graph->hasContext()) {
@@ -144,9 +144,9 @@ void NodePlot::on_pushButton_clicked()
    // ui->customPlot->xAxis->setRange(XMIN, XMAX);
     //ui->customPlot->yAxis->setRange(YMIN, YMAX);
     //ui->customPlot->replot();
-    graph->axisX()->setRange(XMIN-xbuffer, XMAX+xbuffer);
-    graph->axisY()->setRange(YMIN-ybuffer, YMAX+ybuffer);
-    graph->axisZ()->setRange(ZMIN-zbuffer, ZMAX+zbuffer);
+//    graph->axisX()->setRange(XMIN-xbuffer, XMAX+xbuffer);
+//    graph->axisY()->setRange(YMIN-ybuffer, YMAX+ybuffer);
+//    graph->axisZ()->setRange(ZMIN-zbuffer, ZMAX+zbuffer);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();

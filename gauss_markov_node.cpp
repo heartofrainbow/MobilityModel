@@ -113,7 +113,7 @@ void gauss_markov_node::run(){
     this->setd(randomDir(e));
     this->setp(randomPitch(e));
     //qDebug()<<this->id<<"\t"<<this->getd()<<endl;
-    double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
+//    double timeout = interval;        //Change gauss_markov_node speed&direction every $interval second
     std::chrono::duration<double, std::micro> tmpTime;     //Time between current and lastshow
     std::chrono::duration<double, std::micro> loopTime;    //Time used for a single loop
     std::chrono::duration<double, std::micro> changeTime;
