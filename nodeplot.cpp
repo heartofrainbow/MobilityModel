@@ -25,6 +25,7 @@
 #include <qmessagebox.h>
 
 
+
 using namespace QtDataVisualization;
 
 
@@ -85,9 +86,10 @@ NodePlot::NodePlot(QWidget *parent) :
     graph->axisX()->setTitleVisible(true);
     graph->axisY()->setTitleVisible(true);
     graph->axisZ()->setTitleVisible(true);
-    graph->axisX()->setAutoAdjustRange(true);
-    graph->axisY()->setAutoAdjustRange(true);
-    graph->axisZ()->setAutoAdjustRange(true);
+    //graph->axisX()->setAutoAdjustRange(true);
+    //graph->axisY()->setAutoAdjustRange(true);
+//    graph->axisZ()->setAutoAdjustRange(true);
+//    graph->setPolar(true);
     series->setItemSize(0.05);
     QWidget *container = QWidget::createWindowContainer(graph);
     if (!graph->hasContext()) {
@@ -104,6 +106,15 @@ NodePlot::NodePlot(QWidget *parent) :
     graph->removeSeries(series);
     series->dataProxy()->addItems(*points);
     graph->addSeries(series);
+//    m_inputHandler = new CustomInputHandler();
+//    graph->setActiveInputHandler(m_inputHandler);
+//    m_selectionTimer = new QTimer(this);
+//    m_selectionTimer->setInterval(10);
+//    m_selectionTimer->setSingleShot(false);
+//    QObject::connect(m_selectionTimer, &QTimer::timeout, this,
+//                     &NodePlot::triggerSelection);
+    QObject::connect(graph,&QAbstract3DGraph::selectedElementChanged,this,&NodePlot::triggerSelection);
+//    m_selectionTimer->start();
 
 }
 
@@ -144,9 +155,46 @@ void NodePlot::on_pushButton_clicked()
    // ui->customPlot->xAxis->setRange(XMIN, XMAX);
     //ui->customPlot->yAxis->setRange(YMIN, YMAX);
     //ui->customPlot->replot();
-//    graph->axisX()->setRange(XMIN-xbuffer, XMAX+xbuffer);
-//    graph->axisY()->setRange(YMIN-ybuffer, YMAX+ybuffer);
-//    graph->axisZ()->setRange(ZMIN-zbuffer, ZMAX+zbuffer);
+//        double a[8][3];
+//        calc(XMIN,YMIN,ZMIN,a[0]);
+//        calc(XMIN,YMIN,ZMAX,a[1]);
+//        calc(XMIN,YMAX,ZMIN,a[2]);
+//        calc(XMIN,YMAX,ZMAX,a[3]);
+//        calc(XMAX,YMIN,ZMIN,a[4]);
+//        calc(XMAX,YMIN,ZMAX,a[5]);
+//        calc(XMAX,YMAX,ZMIN,a[6]);
+//        calc(XMAX,YMAX,ZMAX,a[7]);
+
+//            double min = a[0][0];
+//            double max = a[0][0];
+//            for(int i=0; i<8;i++){
+//                if(a[0][i] < min) min = a[0][i];
+//                if(a[0][i] > max) max = a[0][i];
+//            }
+//            double longitudes[2] = {min, max};
+//            min = a[1][0];
+//            max = a[1][0];
+//            for(int i=0; i<8;i++){
+//                if(a[1][i] < min) min = a[1][i];
+//                if(a[1][i] > max) max = a[1][i];
+//            }
+//            double latitudes[2] = {min,max};
+//            min = a[2][0];
+//            max = a[2][0];
+//            for(int i=0; i<8;i++){
+//                if(a[2][i] < min) min = a[2][i];
+//                if(a[2][i] > max) max = a[2][i];
+//            }
+//            double heights[2] = {min,max};
+    graph->axisX()->setRange(XMIN-xbuffer, XMAX+xbuffer);
+    graph->axisY()->setRange(YMIN-ybuffer, YMAX+ybuffer);
+    graph->axisZ()->setRange(ZMIN-zbuffer, ZMAX+zbuffer);
+//            graph->axisX()->setRange(longitudes[0], longitudes[1]);
+//            graph->axisY()->setRange(latitudes[0], latitudes[1]);
+//            graph->axisZ()->setRange(heights[0],heights[1]);
+//            graph->axisX()->setAutoAdjustRange(true);
+//            graph->axisY()->setAutoAdjustRange(true);
+//            graph->axisZ()->setAutoAdjustRange(true);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
     nNodes = ui->input_nNodes->text().toInt();
@@ -216,3 +264,80 @@ void NodePlot::on_comboBox_currentIndexChanged(int index)
         type = 3;
     }
 }
+
+void NodePlot::calc(double x, double y, double z, double* array){
+    double _radiusEquator = 6378137;
+    double _radiusPolar =  6356752.3142;
+    double f = 1/298.257223563;
+    double _eccentricitySquared = 2*f - pow(f,2);
+    double p = sqrt(x*x + y*y);
+
+    double theta = atan2(z*_radiusEquator , (p*_radiusPolar));
+
+    double eDashSquared = (_radiusEquator*_radiusEquator - _radiusPolar*_radiusPolar)/
+            (_radiusPolar*_radiusPolar);
+
+
+    double sin_theta = sin(theta);
+
+    double cos_theta = cos(theta);
+
+
+    double latitude = atan( (z + eDashSquared*_radiusPolar*sin_theta*sin_theta*sin_theta) /
+    (p - _eccentricitySquared*_radiusEquator*cos_theta*cos_theta*cos_theta) );
+
+    double longitude = atan2(y,x);
+
+
+    double sin_latitude = sin(latitude);
+
+    double N = _radiusEquator / sqrt( 1.0 - _eccentricitySquared*sin_latitude*sin_latitude);
+
+
+    double height = p/cos(latitude) - N;
+    array[0] = longitude;
+    array[1] = latitude;
+    array[2] = height;
+}
+
+void NodePlot::triggerSelection(){
+//    graph->scene()->setSelectionQueryPosition(m_inputHandler->inputPosition());
+//    cout<<QTime::currentTime().second()<<endl;
+//    cout<<graph->seriesList().first()->selectedItem()<<endl;
+    int itm = graph->seriesList().first()->selectedItem();
+    if(itm == -1)return;
+    double X = points->at(itm).x();
+    double Y = points->at(itm).y();
+    double Z = points->at(itm).z();
+    double _radiusEquator = 6378137;
+    double _radiusPolar =  6356752.3142;
+    double f = 1/298.257223563;
+    double _eccentricitySquared = 2*f - pow(f,2);
+    double p = sqrt(X*X + Y*Y);
+
+    double theta = atan2(Z*_radiusEquator , (p*_radiusPolar));
+
+    double eDashSquared = (_radiusEquator*_radiusEquator - _radiusPolar*_radiusPolar)/
+            (_radiusPolar*_radiusPolar);
+
+
+    double sin_theta = sin(theta);
+
+    double cos_theta = cos(theta);
+
+
+    double latitude = atan( (Z + eDashSquared*_radiusPolar*sin_theta*sin_theta*sin_theta) /
+    (p - _eccentricitySquared*_radiusEquator*cos_theta*cos_theta*cos_theta) );
+
+    double longitude = atan2(Y,X);
+
+
+    double sin_latitude = sin(latitude);
+
+    double N = _radiusEquator / sqrt( 1.0 - _eccentricitySquared*sin_latitude*sin_latitude);
+
+
+    double height = p/cos(latitude) - N;
+    cout<<"longitude="<<longitude<<"\tlatitude="<<latitude<<"\theight="<<height<<endl;
+}
+

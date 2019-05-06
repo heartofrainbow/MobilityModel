@@ -45,8 +45,8 @@ void random_walk_node::update(double time){   //parameter time is in second
         this->x += this->getv()*cos(this->getd())*sin(this->getp())*time;
         this->y += this->getv()*sin(this->getd())*sin(this->getp())*time;
         this->z += this->getv()*cos(this->getp())*time;
-        calc(id,this->x,this->y,this->z);
-//        series->dataProxy()->resetArray(points);
+//        calc(id,this->x,this->y,this->z);
+        points->replace(id,QVector3D(this->x,this->y,this->z));
 }
 
 void random_walk_node::reflect(int err){      //err: 1 XMIN 2 XMAX 3 YMIN 4 YMAX

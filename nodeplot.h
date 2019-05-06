@@ -17,7 +17,7 @@ public:
     explicit NodePlot(QWidget *parent = nullptr);
 //    NodePlot();
     ~NodePlot();
-
+    void calc(double x, double y, double z, double* array);
 private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
@@ -26,9 +26,12 @@ private slots:
 
 public slots:
     void on_FlushNodes();
+//    void on_item_selected()
+    void triggerSelection();
 private:
     Ui::NodePlot *ui;
-
+//    QTimer *m_selectionTimer;
+//    CustomInputHandler* m_inputHandler;
 };
 
 

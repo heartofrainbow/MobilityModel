@@ -92,5 +92,6 @@ void node::calc(int id, double X, double Y, double Z){
 
 
     double height = p/cos(latitude) - N;
-    points->replace(id,QVector3D(latitude,longitude,height));
+//    points->replace(id,QVector3D(latitude,longitude,height));
+    points->replace(id,QVector3D(longitude,latitude,height));
 }
