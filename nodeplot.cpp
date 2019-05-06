@@ -90,7 +90,8 @@ NodePlot::NodePlot(QWidget *parent) :
     //graph->axisY()->setAutoAdjustRange(true);
 //    graph->axisZ()->setAutoAdjustRange(true);
 //    graph->setPolar(true);
-    series->setItemSize(0.05);
+    series->setItemSize(0.15);
+    graph->activeTheme()->setLabelBorderEnabled(false);
     QWidget *container = QWidget::createWindowContainer(graph);
     if (!graph->hasContext()) {
         QMessageBox msgBox;
