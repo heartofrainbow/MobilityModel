@@ -114,6 +114,7 @@ NodePlot::NodePlot(QWidget *parent) :
 //    QObject::connect(m_selectionTimer, &QTimer::timeout, this,
 //                     &NodePlot::triggerSelection);
     QObject::connect(graph,&QAbstract3DGraph::selectedElementChanged,this,&NodePlot::triggerSelection);
+
 //    m_selectionTimer->start();
 
 }
@@ -197,6 +198,7 @@ void NodePlot::on_pushButton_clicked()
 //            graph->axisZ()->setAutoAdjustRange(true);
     showNodes *shower = new showNodes();
     connect(shower,SIGNAL(flushNodes()),this,SLOT(on_FlushNodes()));
+    QObject::connect(shower,&showNodes::flushNodes,this,&NodePlot::triggerSelection);
     nNodes = ui->input_nNodes->text().toInt();
     running = true;
     points->resize(nNodes);
@@ -305,7 +307,10 @@ void NodePlot::triggerSelection(){
 //    cout<<QTime::currentTime().second()<<endl;
 //    cout<<graph->seriesList().first()->selectedItem()<<endl;
     int itm = graph->seriesList().first()->selectedItem();
-    if(itm == -1)return;
+    if(itm == -1){
+        ui->currentlocation->setText(QString("Current Location:"));
+        return;
+    }
     double X = points->at(itm).x();
     double Y = points->at(itm).y();
     double Z = points->at(itm).z();
@@ -338,6 +343,8 @@ void NodePlot::triggerSelection(){
 
 
     double height = p/cos(latitude) - N;
-    cout<<"longitude="<<longitude<<"\tlatitude="<<latitude<<"\theight="<<height<<endl;
+//    cout<<"longitude="<<longitude<<"\tlatitude="<<latitude<<"\theight="<<height<<endl;
+    ui->currentlocation->setText("Current Location:longitude="+QString::number(longitude)+"\tlatitude="
+                                 +QString::number(latitude)+"\theight="+QString::number(height));
 }
 
