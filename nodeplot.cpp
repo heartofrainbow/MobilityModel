@@ -337,7 +337,6 @@ void NodePlot::triggerSelection(){
 
     double longitude = atan2(Y,X);
 
-
     double sin_latitude = sin(latitude);
 
     double N = _radiusEquator / sqrt( 1.0 - _eccentricitySquared*sin_latitude*sin_latitude);
@@ -345,7 +344,7 @@ void NodePlot::triggerSelection(){
 
     double height = p/cos(latitude) - N;
 //    cout<<"longitude="<<longitude<<"\tlatitude="<<latitude<<"\theight="<<height<<endl;
-    ui->currentlocation->setText("Current Location:longitude="+QString::number(longitude)+"\tlatitude="
-                                 +QString::number(latitude)+"\theight="+QString::number(height));
+    ui->currentlocation->setText("Current Location:longitude="+QString::number(longitude,'f',6)+"\tlatitude="
+                                 +QString::number(latitude,'f',6)+"\theight="+QString::number(height,'f',6));
 }
 
